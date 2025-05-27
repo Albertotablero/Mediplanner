@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 //        //Treatments Tab fragment
 //        treatmentsTabFragment = fragmentManager.getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.treatments.TreatmentsTabFragment");
 
+//Another git test lol
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

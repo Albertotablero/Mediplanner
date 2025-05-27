@@ -32,6 +32,10 @@ public class Plan {
         setStartDate(Calendar.getInstance().getTime());
     }
 
+    private void setFrequencyMetric(FrequencyMetric fMetric) {
+        this.frequencyMetric = fMetric;
+    }
+
     public Plan() {
         setStartDate(Calendar.getInstance().getTime());
         setActive(false);
@@ -76,7 +80,7 @@ public class Plan {
 
     public void setFrequencyMetric(int frequencyMetric) {
 
-        switch (frequencyMetric){
+        switch (frequencyMetric) {
             case 1:
                 this.frequencyMetric = FrequencyMetric.DAILY;
                 break;
