@@ -117,6 +117,7 @@ public class PlanFragment extends DialogFragment {
         //Frequency i don't even know yet
         plan.setFrequencyMetric(planBidnding.freqTypeSpinner.getSelectedItemPosition());
         //plan.setStartDate(planBidnding.startDate.get);
+        //Just testing git tbh
     }
 
 
