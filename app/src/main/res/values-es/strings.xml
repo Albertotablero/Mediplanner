@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="calendar_tab">Calendario</string>
+    <string name="new_plan_tittle">Añadir nuevo plan de tratamiento</string>
+    <string name="edit_plan_tittle">Editar plan de tratamiento</string>
+    <string name="treatment_name_prompt">Nombre para el plan de tratamiento</string>
+    <string name="treatment_details">Detalles</string>
+    <string name="treatment_details_prompt">Detalles importantes sobre el tratamiento (por ejemplo, como tomar)</string>
+    <string name="name">Nombre</string>
+    <string name="frequency">Frecuencia</string>
+    <string name="frequency_type">Tipo</string>
+    <string name="save_button">Guardar</string>
+    <string name="start_date">Fecha de inicio</string>
+    <string name="treatment_form">Medio</string>
+    <string-array name="freq_type_array">
+        <item>Tipo</item>
+        <item name="hourly_frequency">Cada x horas</item>
+        <item name="daily_frequency">Diariamente</item>
+        <item name="weekly_frequency">Semanalmente</item>
+        <item name="monthly_frequency">Mensualmente</item>
+        <item name="annually_frequency">Anualmente</item>
+        <item name="speciffic_frequency">Speciffic dates</item>
+        <item name="as_needed">Según se nesecite</item>
+    </string-array>
+    <string-array name="form_type_array">
+        <item>Medio</item>
+        <item name="pill">Pastillas (Capsulas, tabletas, etc.)</item>
+        <item name="liquid">Líquido (I.E. Jarabe)</item>
+        <item name="drops">Gotas</item>
+        <item name="inhaler">Inhalador/Pulverisadores</item>
+        <item name="injection">Inyección</item>
+        <item name="Cream">Crema</item>
+        <item name="patches">Parches</item>
+        <item name="packet">Sobres</item>
+    </string-array>
+    <string name="treatment_tab">Tratamiento</string>
+    <string name="Delete">Borrar</string>
+    <string name="Edit">Editar</string>
+</resources>

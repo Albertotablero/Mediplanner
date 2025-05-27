@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name" translatable="false">Mediplanner</string>
+
+    //UI
+    <string name="calendar_tab">Calendar</string>
+    <string name="treatment_tab">Treatment</string>
+
+    //Plan creation and edition fragment ui strings
+    <string name="new_plan_tittle">Add new treatment plan</string>
+    <string name="edit_plan_tittle">Edit treatment plan</string>
+
+    <string name="name">Name</string>
+    <string name="treatment_name_prompt">Name for the treatment plan</string>
+
+    <string name="treatment_details">Details</string>
+    <string name="treatment_details_prompt">Important details about the treatment (how to take, etc.)</string>
+
+    <string name="start_date">Start Date</string>
+
+    <string name="frequency">Frequency</string>
+    <string name="frequency_type">Type</string>
+    <string name="treatment_form">Form</string>
+    <string-array name="freq_type_array">
+        <item>Type</item>
+        <item name="hourly_frequency">Every x hours</item>
+        <item name="daily_frequency">Daily</item>
+        <item name="weekly_frequency">Weekly</item>
+        <item name="monthly_frequency">Monthly</item>
+        <item name="annually_frequency">Annually</item>
+        <item name="speciffic_frequency">Días Específicos</item>
+        <item name="as_needed">As needed</item>
+    </string-array>
+    <string-array name="form_type_array">
+        <item>Type</item>
+        <item name="pill">Pills (Capsules, tablets, etc.)</item>
+        <item name="liquid">Liquid (I.E. Syrup)</item>
+        <item name="drops">Drops</item>
+        <item name="inhaler">Inhaler/Pulverisers</item>
+        <item name="injection">Injections</item>
+        <item name="Cream">Cream</item>
+        <item name="patches">Patches</item>
+        <item name="packet">Packets</item>
+    </string-array>
+
+
+    <string name="save_button">Save</string>
+    <string name="Delete">Delete</string>
+    <string name="Edit">Edit</string>
+
+    //Plan Creation End
+
+
+</resources>
