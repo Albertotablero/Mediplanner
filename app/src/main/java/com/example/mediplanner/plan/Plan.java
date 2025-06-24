@@ -3,6 +3,7 @@ package com.example.mediplanner.plan;
 import com.example.mediplanner.utils.FrequencyMetric;
 import com.example.mediplanner.utils.TreatmentForm;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -17,9 +18,13 @@ public class Plan {
     private float duration; // Duration of the treatment plan
     private FrequencyMetric durationMetric; //How to measure the duration
     private boolean isActive; // Whether the treatment plan is active or not
-    private TreatmentForm form; // Form of the treatment (Medium of consumption)
+    private TreatmentForm form; // Form of the treatment (Medium of consumption)ç
 
-    public Plan(String name, String details, boolean isActive, float frequency, FrequencyMetric fMetric,
+    //for specific treatment forms or frequencies
+    private LocalDate[] specificDates;
+
+
+    public Plan(String name, String details, boolean isActive, float frequency, int fMetric,
                 Date startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
         setName(name);
         setDetails(details);
@@ -30,10 +35,6 @@ public class Plan {
         setDuration(duration);
         setDurationMetric(durationMetric);
         setStartDate(Calendar.getInstance().getTime());
-    }
-
-    private void setFrequencyMetric(FrequencyMetric fMetric) {
-        this.frequencyMetric = fMetric;
     }
 
     public Plan() {
@@ -144,5 +145,13 @@ public class Plan {
 
     public void setForm(TreatmentForm form) {
         this.form = form;
+    }
+
+    public LocalDate[] getSpecificDates() {
+        return specificDates;
+    }
+
+    public void setSpecificDates(LocalDate[] specificDates) {
+        this.specificDates = specificDates;
     }
 }

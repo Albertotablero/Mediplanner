@@ -11,8 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 public class SpinnerAdapter extends ArrayAdapter<String> {
     public SpinnerAdapter(@NonNull Context context, int resource,String[] items) {
+        super(context, resource,items);
+    }
+    public SpinnerAdapter(@NonNull Context context, int resource, List<String> items) {
         super(context, resource,items);
     }
 

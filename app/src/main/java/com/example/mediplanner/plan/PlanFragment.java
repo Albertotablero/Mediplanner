@@ -1,10 +1,24 @@
 package com.example.mediplanner.plan;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +27,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.DataBindingUtil;
 
+import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
-import com.example.mediplanner.date.DatePicker;
 import com.example.mediplanner.utils.SpinnerAdapter;
+import com.google.android.material.textfield.TextInputEditText;
 
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class PlanFragment extends DialogFragment {
 
@@ -63,7 +82,7 @@ public class PlanFragment extends DialogFragment {
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
-                            public void onDateSet(android.widget.DatePicker dp, int year, int month, int dayOfMonth) {
+                            public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
                                 planBidnding.startDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                             }
 
@@ -77,10 +96,86 @@ public class PlanFragment extends DialogFragment {
         freqSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         planBidnding.freqTypeSpinner.setAdapter(freqSpinAdapter);
 
+        // Change view based on selected frequency typ
+        planBidnding.freqTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Removing the last child (Pending check before deleting and inserting the same view)
+                if (planBidnding.frequencyBox.getChildCount() > 1)
+                    planBidnding.frequencyBox.removeViewAt(1);
+
+                View child = null;
+                switch (position) {
+                    case 1:
+                        EditText hoursFreq = new EditText(getContext());
+                        hoursFreq.setHint(R.string.dailyFreqHintText);
+                        hoursFreq.setInputType(InputType.TYPE_CLASS_DATETIME);
+
+                        child = hoursFreq;
+                        break;
+                    case 2:
+                        ListView dailyHoursView = new ListView(getContext());
+
+                        TextView hoursTextView = new TextView(getContext());
+                        hoursTextView.setText(R.string.dailyFreqHintText);
+
+                        dailyHoursView.addView(getNewItem());
+
+                        Button addHours = new Button(getContext());
+                        addHours.setText(R.string.add);
+                        dailyHoursView.addFooterView(addHours);
+
+                        child = dailyHoursView;
+                        break;
+                    default:
+                        break;
+
+                }
+                if (child != null) planBidnding.frequencyBox.addView(child);
+            }
+
+            private View getNewItem() {
+                LinearLayout view = new LinearLayout(getContext());
+
+                Spinner hours = new Spinner(getContext(), Spinner.MODE_DROPDOWN);
+                List<String> hoursList = new ArrayList<String>();
+                for (int i = 1; i <= 24; i++) {
+                    hoursList.add(i + "");
+                }
+                hours.setAdapter(new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, hoursList));
+
+
+                TextView separator = new TextView(getContext());
+                separator.setText(":");
+
+                Spinner minutes = new Spinner(getContext(), Spinner.MODE_DROPDOWN);
+                List<String> minutesList = new ArrayList<String>();
+                for (int i = 1; i < 60; i++) {
+                    if (i > 10) {
+                        minutesList.add(i + "");
+                    } else {
+                        minutesList.add("0" + i);
+                    }
+                }
+                hours.setAdapter(new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, minutesList));
+
+                view.addView(hours);
+                view.addView(separator);
+                view.addView(minutes);
+                return view;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("Meh", "onNothingSelected: ");
+            }
+        });
+
         // Treatment Form Spinner
         SpinnerAdapter formSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.form_type_array));
         formSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         planBidnding.formTypeSpinner.setAdapter(formSpinAdapter);
+
 
         //Save Button
         planBidnding.savePlanButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +196,7 @@ public class PlanFragment extends DialogFragment {
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        getDialog().getWindow().setAttributes((WindowManager.LayoutParams) params);
 
 
     }
@@ -117,7 +212,6 @@ public class PlanFragment extends DialogFragment {
         //Frequency i don't even know yet
         plan.setFrequencyMetric(planBidnding.freqTypeSpinner.getSelectedItemPosition());
         //plan.setStartDate(planBidnding.startDate.get);
-        //Just testing git tbh
     }
 
 

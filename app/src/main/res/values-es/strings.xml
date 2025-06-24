@@ -2,6 +2,7 @@
 <resources>
     <string name="calendar_tab">Calendario</string>
     <string name="new_plan_tittle">Añadir nuevo plan de tratamiento</string>
+    <string name="add">Más</string>
     <string name="edit_plan_tittle">Editar plan de tratamiento</string>
     <string name="treatment_name_prompt">Nombre para el plan de tratamiento</string>
     <string name="treatment_details">Detalles</string>
@@ -19,9 +20,11 @@
         <item name="weekly_frequency">Semanalmente</item>
         <item name="monthly_frequency">Mensualmente</item>
         <item name="annually_frequency">Anualmente</item>
-        <item name="speciffic_frequency">Speciffic dates</item>
+        <item name="speciffic_frequency">Días especificos</item>
         <item name="as_needed">Según se nesecite</item>
     </string-array>
+    <string name="dailyFreqTextView">Cuando poner avisoº</string>
+    <string name="dailyFreqHintText">Cada cuantas horas</string>
     <string-array name="form_type_array">
         <item>Medio</item>
         <item name="pill">Pastillas (Capsulas, tabletas, etc.)</item>
@@ -36,4 +39,5 @@
     <string name="treatment_tab">Tratamiento</string>
     <string name="Delete">Borrar</string>
     <string name="Edit">Editar</string>
+
 </resources>

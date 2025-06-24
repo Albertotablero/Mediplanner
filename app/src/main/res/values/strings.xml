@@ -4,6 +4,7 @@
     //UI
     <string name="calendar_tab">Calendar</string>
     <string name="treatment_tab">Treatment</string>
+    <string name="add">add</string>
 
     //Plan creation and edition fragment ui strings
     <string name="new_plan_tittle">Add new treatment plan</string>
@@ -30,6 +31,10 @@
         <item name="speciffic_frequency">Días Específicos</item>
         <item name="as_needed">As needed</item>
     </string-array>
+    <string name="dailyFreqTextView">When to set reminder</string>
+    <string name="dailyFreqHintText">How often</string>
+
+
     <string-array name="form_type_array">
         <item>Type</item>
         <item name="pill">Pills (Capsules, tablets, etc.)</item>
