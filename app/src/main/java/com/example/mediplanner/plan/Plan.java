@@ -1,9 +1,16 @@
 package com.example.mediplanner.plan;
 
+import android.widget.Toast;
+
 import com.example.mediplanner.utils.FrequencyMetric;
 import com.example.mediplanner.utils.TreatmentForm;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,10 +29,12 @@ public class Plan {
 
     //for specific treatment forms or frequencies
     private LocalDate[] specificDates;
+    private ArrayList<String> dailyHours;
 
 
     public Plan(String name, String details, boolean isActive, float frequency, int fMetric,
                 Date startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
+        initialize();
         setName(name);
         setDetails(details);
         setActive(isActive);
@@ -38,9 +47,17 @@ public class Plan {
     }
 
     public Plan() {
+        initialize();
+
+    }
+
+    private void initialize() {
         setStartDate(Calendar.getInstance().getTime());
         setActive(false);
 
+        dailyHours = new ArrayList<String>();
+        //Test hours
+        dailyHours.add(DateTime.now().getHourOfDay() + ":" + DateTime.now().getMinuteOfHour());
     }
 
     public String getName() {
@@ -153,5 +170,9 @@ public class Plan {
 
     public void setSpecificDates(LocalDate[] specificDates) {
         this.specificDates = specificDates;
+    }
+
+    public ArrayList<String> getDailyHours() {
+        return dailyHours;
     }
 }

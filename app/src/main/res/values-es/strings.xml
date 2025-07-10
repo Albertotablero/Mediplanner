@@ -10,6 +10,8 @@
     <string name="name">Nombre</string>
     <string name="frequency">Frecuencia</string>
     <string name="frequency_type">Tipo</string>
+    <string name="removeHourWarnignTitle">Eliminar Hora</string>
+    <string name="removeHourPrompt">¿Está seguro que quiere eliminar esta Hora?</string>
     <string name="save_button">Guardar</string>
     <string name="start_date">Fecha de inicio</string>
     <string name="treatment_form">Medio</string>

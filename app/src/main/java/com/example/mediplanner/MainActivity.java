@@ -4,6 +4,7 @@ package com.example.mediplanner;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.mediplanner.databinding.ActivityMainBinding;
 import com.example.mediplanner.plan.PlanFragment;
 import com.google.android.material.tabs.TabLayout;
+
+import org.joda.time.DateTime;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,13 +52,6 @@ public class MainActivity extends AppCompatActivity {
         //Setting up fragments
         fragmentManager = getSupportFragmentManager();
 
-//        //Calendar Tab fragment
-//        calendarTabFragment = fragmentManager.getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.calendar.CalendarTabFragment");
-//
-//        //Treatments Tab fragment
-//        treatmentsTabFragment = fragmentManager.getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.treatments.TreatmentsTabFragment");
-
-//Another git test lol
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -107,6 +103,5 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(planFragment, "planF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(planFragment).commit();
             }
         });
-
     }
 }

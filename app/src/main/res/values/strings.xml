@@ -33,6 +33,8 @@
     </string-array>
     <string name="dailyFreqTextView">When to set reminder</string>
     <string name="dailyFreqHintText">How often</string>
+    <string name="removeHourWarnignTitle">Remove hour</string>
+    <string name="removeHourPrompt">Are you sure you want to remove this Hour?</string>
 
 
     <string-array name="form_type_array">
