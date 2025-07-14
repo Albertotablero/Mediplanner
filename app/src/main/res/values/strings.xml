@@ -36,6 +36,16 @@
     <string name="removeHourWarnignTitle">Remove hour</string>
     <string name="removeHourPrompt">Are you sure you want to remove this Hour?</string>
 
+    <string name="monday">M</string>
+    <string name="tuesday">T</string>
+    <string name="wednesday">W</string>
+    <string name="thursday">R</string>
+    <string name="friday">F</string>
+    <string name="saturday">S</string>
+    <string name="sunday">U</string>
+
+    <string name="removeDateWarnignTitle">Remove Date</string>
+    <string name="removeDatePrompt">Are you sure you want to remove this specific Date?</string>
 
     <string-array name="form_type_array">
         <item>Type</item>

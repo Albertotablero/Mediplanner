@@ -11,7 +11,14 @@
     <string name="frequency">Frecuencia</string>
     <string name="frequency_type">Tipo</string>
     <string name="removeHourWarnignTitle">Eliminar Hora</string>
-    <string name="removeHourPrompt">¿Está seguro que quiere eliminar esta Hora?</string>
+    <string name="removeHourPrompt">¿Seguro que desea eliminar esta Hora?</string>
+    <string name="monday">L</string>
+    <string name="tuesday">M</string>
+    <string name="wednesday">X</string>
+    <string name="thursday">J</string>
+    <string name="friday">V</string>
+    <string name="saturday">S</string>
+    <string name="sunday">D</string>
     <string name="save_button">Guardar</string>
     <string name="start_date">Fecha de inicio</string>
     <string name="treatment_form">Medio</string>
@@ -41,5 +48,7 @@
     <string name="treatment_tab">Tratamiento</string>
     <string name="Delete">Borrar</string>
     <string name="Edit">Editar</string>
+    <string name="removeDateWarnignTitle">Eliminar Fecha</string>
+    <string name="removeDatePrompt">¿Seguro que desea eliminar esta fecha?</string>
 
 </resources>

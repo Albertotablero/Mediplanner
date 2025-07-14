@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/mondayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/monday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tuesdayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayButton"
+        android:layout_toEndOf="@id/mondayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/tuesday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/wednesdayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tuesdayButton"
+        android:layout_toEndOf="@id/tuesdayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/wednesday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/thursdayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/wednesdayButton"
+        android:layout_toEndOf="@id/wednesdayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/thursday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/fridayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/thursdayButton"
+        android:layout_toEndOf="@id/thursdayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/friday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/saturdayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/fridayButton"
+        android:layout_toEndOf="@id/fridayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/saturday"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/sundayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/saturdayButton"
+        android:layout_toEndOf="@id/saturdayButton"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:defaultFocusHighlightEnabled="false"
+        android:includeFontPadding="false"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:text="@string/sunday"
+        android:textColor="@color/black" />
+
+    <Spinner
+        android:id="@+id/spinnerHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mondayButton"
+        android:layout_marginVertical="5dp"
+        android:layout_marginStart="5dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@id/mondayButton"
+        android:layout_alignBaseline="@id/spinnerHours"
+        android:layout_marginVertical="5dp"
+        android:layout_toEndOf="@id/spinnerHours"
+        android:text=":" />
+
+    <Spinner
+        android:id="@+id/spinnerMinutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mondayButton"
+        android:layout_alignBaseline="@id/spinnerHours"
+        android:layout_marginVertical="5dp"
+        android:layout_toEndOf="@id/textView2" />
+</RelativeLayout>

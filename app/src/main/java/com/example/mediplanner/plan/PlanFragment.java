@@ -3,6 +3,7 @@ package com.example.mediplanner.plan;
 import android.app.DatePickerDialog;
 import android.icu.text.ListFormatter;
 import android.os.Bundle;
+import android.telephony.IccOpenLogicalChannelResponse;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +30,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
 import com.example.mediplanner.utils.HoursListViewAdapter;
+import com.example.mediplanner.utils.SpecificDateViewAdapter;
 import com.example.mediplanner.utils.SpinnerAdapter;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,15 +79,14 @@ public class PlanFragment extends DialogFragment {
                 int mMonth = c.get(Calendar.MONTH); // current month
                 int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
                 // date picker dialog
-                datePickerDialog = new DatePickerDialog(requireContext(),
-                        new DatePickerDialog.OnDateSetListener() {
+                datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
 
-                            @Override
-                            public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
-                                planBidnding.startDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                            }
+                    @Override
+                    public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
+                        planBidnding.startDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                    }
 
-                        }, mYear, mMonth, mDay);
+                }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         });
@@ -97,11 +101,20 @@ public class PlanFragment extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Removing the last child (Pending check before deleting and inserting the same view)
-                if (planBidnding.frequencyBox.getChildCount() > 1)
+                if (planBidnding.frequencyBox.getChildCount() > 1) {
                     planBidnding.frequencyBox.removeViewAt(1);
+
+                    // resetting visibility of start date after changing from specific dates
+                    if (planBidnding.startDate.getVisibility() != View.VISIBLE) {
+                        planBidnding.startDate.setVisibility(View.VISIBLE);
+                        planBidnding.StartDateTextView.setVisibility(View.VISIBLE);
+                        planBidnding.calendarDialogButton.setVisibility(View.VISIBLE);
+                    }
+                }
 
                 View child = null;
                 switch (position) {
+                    // EVERY X HOURS
                     case 1:
                         EditText hoursFreq = new EditText(getContext());
                         hoursFreq.setHint(R.string.dailyFreqHintText);
@@ -109,6 +122,7 @@ public class PlanFragment extends DialogFragment {
 
                         child = hoursFreq;
                         break;
+                    //   DAILY
                     case 2:
                         //Create list view to add or remove hours for daily treatments
                         ListView dailyHoursView = new ListView(getContext());
@@ -126,11 +140,97 @@ public class PlanFragment extends DialogFragment {
 
                         child = dailyHoursView;
                         break;
+                    // WEEKLY
+                    case 3:
+                        // Inflating a week day piker for the weekly frequency type
+                        RelativeLayout weeklyView = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.week_day_picker_widget, planBidnding.frequencyBox, false);
+                        // Setting up functionality for each button
+                        ArrayList<Boolean> weeksActive = new ArrayList<Boolean>();
+                        for (int i = 0; i < 7; i++) {
+                            weeksActive.add(false);
+                        }
+
+                        // Monday
+                        TextView monButton = weeklyView.findViewById(R.id.mondayButton);
+                        monButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        monButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 0, monButton));
+                        // Tuesday
+                        TextView tueButton = weeklyView.findViewById(R.id.tuesdayButton);
+                        tueButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        tueButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 1, tueButton));
+                        // Wednesday
+                        TextView wedButton = weeklyView.findViewById(R.id.wednesdayButton);
+                        wedButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        wedButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 2, wedButton));
+                        // Thursday
+                        TextView thuButton = weeklyView.findViewById(R.id.thursdayButton);
+                        thuButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        thuButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 3, thuButton));
+                        // Friday
+                        TextView friButton = weeklyView.findViewById(R.id.fridayButton);
+                        friButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        friButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 4, friButton));
+                        // Saturday
+                        TextView satButton = weeklyView.findViewById(R.id.saturdayButton);
+                        satButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        satButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 5, satButton));
+                        // Sunday
+                        TextView sunButton = weeklyView.findViewById(R.id.sundayButton);
+                        sunButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                        sunButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 6, sunButton));
+
+                        //Managing the hour for the treatment
+                        ArrayList<String> hour = new ArrayList<>();
+                        ArrayList<String> minute = new ArrayList<>();
+                        HoursListViewAdapter.fillHoursAndMinutes(hour, minute);
+
+                        Spinner hoursSpinner = weeklyView.findViewById(R.id.spinnerHours);
+                        String[] hoursArray = new String[hour.size()];
+                        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(hoursArray));
+                        hoursSpinner.setAdapter(hourSpinAdpt);
+
+                        Spinner minutesSpinner = weeklyView.findViewById(R.id.spinnerMinutes);
+                        String[] minutesArray = new String[hour.size()];
+                        SpinnerAdapter minutesSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(minutesArray));
+                        minutesSpinner.setAdapter(minutesSpinAdpt);
+
+                        child = weeklyView;
+                        break;
+                    case 6:
+                        // Hiding star date
+                        planBidnding.StartDateTextView.setVisibility(View.INVISIBLE);
+                        planBidnding.startDate.setVisibility(View.INVISIBLE);
+                        planBidnding.calendarDialogButton.setVisibility(View.INVISIBLE);
+
+                        ListView specificDatesListView = new ListView(getContext());
+
+                        String dateFormat = "%1$02d/%2$02d/%3$4d";
+                        SpecificDateViewAdapter specificDateViewAdapter = new SpecificDateViewAdapter(getContext(), plan.getSpecificDates(), dateFormat);
+                        specificDatesListView.setAdapter(specificDateViewAdapter);
+
+                        Button addDateButton = new Button(getContext());
+                        addDateButton.setText(R.string.add);
+                        addDateButton.setOnClickListener(e -> addDate(specificDateViewAdapter, dateFormat));
+
+                        specificDatesListView.addFooterView(addDateButton);
+
+                        child = specificDatesListView;
+                        break;
                     default:
                         break;
 
                 }
                 if (child != null) planBidnding.frequencyBox.addView(child);
+            }
+
+            private void addDate(SpecificDateViewAdapter specificDateViewAdapter, String dateFormat) {
+                LocalDate today = LocalDate.now();
+                int year = today.getYear();
+                int month = today.getMonthOfYear();
+                int day = today.getDayOfMonth();
+
+                specificDateViewAdapter.add(String.format(dateFormat, day, month, year));
+
             }
 
             private void addHours(HoursListViewAdapter hoursAdapter) {
@@ -160,6 +260,18 @@ public class PlanFragment extends DialogFragment {
 
             }
         });
+    }
+
+    private void changeWeekButtonSate(ArrayList<Boolean> daysActive, int dayOfWeek, TextView weekdayButton) {
+        daysActive.set(dayOfWeek, !daysActive.get(dayOfWeek));
+        Toast.makeText(getContext(), "" + daysActive.get(dayOfWeek), Toast.LENGTH_SHORT).show();
+
+        if (daysActive.get(dayOfWeek)) {
+            weekdayButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOn, getActivity().getTheme()));
+
+        } else {
+            weekdayButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+        }
     }
 
     //uhhhhh size and shit??
