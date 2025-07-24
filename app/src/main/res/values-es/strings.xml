@@ -50,5 +50,7 @@
     <string name="Edit">Editar</string>
     <string name="removeDateWarnignTitle">Eliminar Fecha</string>
     <string name="removeDatePrompt">¿Seguro que desea eliminar esta fecha?</string>
+    <string name="quantity">Cantidad</string>
+    <string name="more">Más</string>
 
 </resources>

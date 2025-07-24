@@ -4,8 +4,8 @@ import com.example.mediplanner.utils.FrequencyMetric;
 import com.example.mediplanner.utils.TreatmentForm;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +30,7 @@ public class Plan {
 
 
     public Plan(String name, String details, boolean isActive, float frequency, int fMetric,
-                Date startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
+                LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
         initialize();
         setName(name);
         setDetails(details);

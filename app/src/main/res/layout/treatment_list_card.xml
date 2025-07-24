@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/nameTreatmentsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:text="Placeholder hello world"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/iconTreatments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/nameTreatmentsTextView"
+        android:maxWidth="16dp"
+        android:maxHeight="16dp"
+        app:srcCompat="@android:drawable/alert_light_frame" />
+
+    <TextView
+        android:id="@+id/descriptionTreatments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconTreatments"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/moreTreatmentsTextView"
+        android:text="Detalles sobre el tratamientom, esto es un placeholder, si lo ves, lo siento" />
+
+    <TextView
+        android:id="@+id/moreTreatmentsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:text="@string/more" />
+</RelativeLayout>

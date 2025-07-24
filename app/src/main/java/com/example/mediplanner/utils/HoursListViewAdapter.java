@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,7 +91,7 @@ public class HoursListViewAdapter extends ArrayAdapter<String> {
         });
 
         // Manage button for removing an hour
-        Button removeItem = convertView.findViewById((R.id.removeHourButon));
+        TextView removeItem = convertView.findViewById((R.id.removeHourButon));
         removeItem.setOnClickListener(e -> removeHour(e, position));
 
         return convertView;

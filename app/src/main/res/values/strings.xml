@@ -63,6 +63,8 @@
     <string name="save_button">Save</string>
     <string name="Delete">Delete</string>
     <string name="Edit">Edit</string>
+    <string name="quantity">Quantity</string>
+    <string name="more">More</string>
 
     //Plan Creation End
 
