@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.databinding.FragmentTreatmentsTabBinding;
 import com.example.mediplanner.plan.Plan;
 
@@ -36,14 +37,13 @@ public class TreatmentsTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        treatmentPlans = MainActivity.getTreatmentPlanList();
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Adding the treatment lists and adapter to the listView
-        treatmentPlans = new ArrayList<>();
 
         TreatmentsArrayAdapter adapter = new TreatmentsArrayAdapter(getContext(), treatmentPlans);
 

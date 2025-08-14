@@ -17,10 +17,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mediplanner.databinding.ActivityMainBinding;
+import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.PlanFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PlanFragment planFragment;
 
+    private static ArrayList<Plan> treatmentPlanList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,5 +107,14 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(planFragment, "planF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(planFragment).commit();
             }
         });
+
+        treatmentPlanList = new ArrayList<>();
+        /*
+         *  TODO Load list from save file
+         * */
+    }
+
+    public static ArrayList<Plan> getTreatmentPlanList() {
+        return treatmentPlanList;
     }
 }

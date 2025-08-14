@@ -1,6 +1,7 @@
 package com.example.mediplanner.plan;
 
 import android.app.DatePickerDialog;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -23,8 +24,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
+import com.example.mediplanner.utils.FrequencyMetric;
 import com.example.mediplanner.utils.HoursListViewAdapter;
 import com.example.mediplanner.utils.SpecificDateViewAdapter;
 import com.example.mediplanner.utils.SpinnerAdapter;
@@ -42,8 +45,8 @@ public class PlanFragment extends DialogFragment {
     private Plan plan;
     private DatePickerDialog datePickerDialog;
 
+    // Check if creating plan or editing existing
     private boolean isNew;
-
 
     public PlanFragment() {
         super();
@@ -190,6 +193,7 @@ public class PlanFragment extends DialogFragment {
                         planBidnding.StartDateTextView.setVisibility(View.INVISIBLE);
                         planBidnding.startDate.setVisibility(View.INVISIBLE);
                         planBidnding.calendarDialogButton.setVisibility(View.INVISIBLE);
+
                         ListView specificDatesListView = new ListView(getContext());
 
                         String dateFormat = "%1$02d/%2$02d/%3$4d";
@@ -328,17 +332,33 @@ public class PlanFragment extends DialogFragment {
     }
 
     private void savePlan() {
-        plan.setActive(true);
-
+        // Setting the new plan to active by default
+        if (isNew) plan.setActive(true);
+        // Saving name without checking because the check occurs earlier
         plan.setName(planBidnding.nameTextInput.getText().toString());
+
+        // Catching nullpointer exception that results from trying to get empty text from an EditText
         try {
             plan.setDetails(planBidnding.detailsTextInput.getText().toString());
         } catch (NullPointerException e) {
             plan.setDetails("");
         }
+
         plan.setFrequencyMetric(planBidnding.freqTypeSpinner.getSelectedItemPosition());
 
-        plan.setStartDate(LocalDate.parse(planBidnding.startDate.getText().toString()));
+        // Saving star date if it's needed
+        if (planBidnding.startDate.getVisibility() == View.VISIBLE) {
+            /*
+             * TODO Magane different formats
+             * */
+            String startDateText = planBidnding.startDate.getText().toString();
+            String[] starDateArray = startDateText.split("/");
+            int year = Integer.parseInt(starDateArray[2]);
+            int month = Integer.parseInt(starDateArray[1]);
+            int day = Integer.parseInt(starDateArray[0]);
+            plan.setStartDate(new LocalDate(year, month, day));
+        }
+
         plan.setForm(planBidnding.formTypeSpinner.getSelectedItemPosition());
 
         if (plan.getForm() == TreatmentForm.LIQUID || plan.getForm() == TreatmentForm.INJECTION) {
@@ -348,7 +368,7 @@ public class PlanFragment extends DialogFragment {
             plan.setQuantity(Float.parseFloat(planBidnding.quantityEditText.getText().toString()));
         }
 
-
+        MainActivity.getTreatmentPlanList().add(plan);
     }
 
 
