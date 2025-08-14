@@ -45,6 +45,18 @@
         <item name="patches">Parches</item>
         <item name="packet">Sobres</item>
     </string-array>
+    <string-array name="quantity_metric_array_liquid">
+        <item>mL</item>
+        <item>cL</item>
+        <item>dL</item>
+        <item>L</item>
+        <item>cucharadas</item>
+        <item>vasos</item>
+    </string-array>
+    <string-array name="quantity_metric_array_injection">
+        <item>mL</item>
+        <item>injecciones</item>
+    </string-array>
     <string name="treatment_tab">Tratamiento</string>
     <string name="Delete">Borrar</string>
     <string name="Edit">Editar</string>
@@ -52,5 +64,9 @@
     <string name="removeDatePrompt">¿Seguro que desea eliminar esta fecha?</string>
     <string name="quantity">Cantidad</string>
     <string name="more">Más</string>
+    <string name="addButtonTooltip">Crear un nuevo plan de tratamiento</string>
+    <string name="fillOutName">Por favor introduzca un nombre con al menos 3 carácteres</string>
+    <string name="selectFreq">Por favor seleccione un tipo de Frecuencia</string>
+    <string name="selectForm">Por favor seleccione el Medio</string>
 
 </resources>

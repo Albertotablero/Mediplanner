@@ -51,7 +51,7 @@ public class HoursListViewAdapter extends ArrayAdapter<String> {
         //Setting up spinners with hours and minutes
         Spinner hourSpinner = convertView.findViewById(R.id.spinnerHours);
         String[] helpme1 = new String[hours.size()];
-        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hours.toArray(helpme1));
+        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hours.toArray(helpme1), false);
 
         hourSpinner.setAdapter(hourSpinAdpt);
         hourSpinner.setSelection(h);
@@ -72,7 +72,7 @@ public class HoursListViewAdapter extends ArrayAdapter<String> {
 
         Spinner minuteSpinner = convertView.findViewById(R.id.spinnerMinutes);
         String[] helpme = new String[minutes.size()];
-        SpinnerAdapter minuteSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, minutes.toArray(helpme));
+        SpinnerAdapter minuteSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, minutes.toArray(helpme), false);
 
         minuteSpinner.setAdapter(minuteSpinAdpt);
         minuteSpinner.setSelection(m);

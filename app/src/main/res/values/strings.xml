@@ -58,6 +58,18 @@
         <item name="patches">Patches</item>
         <item name="packet">Packets</item>
     </string-array>
+    <string-array name="quantity_metric_array_liquid">
+        <item>mL</item>
+        <item>cL</item>
+        <item>dL</item>
+        <item>L</item>
+        <item>spoonfuls</item>
+        <item>cups</item>
+    </string-array>
+    <string-array name="quantity_metric_array_injection">
+        <item>mL</item>
+        <item>shots</item>
+    </string-array>
 
 
     <string name="save_button">Save</string>
@@ -65,6 +77,10 @@
     <string name="Edit">Edit</string>
     <string name="quantity">Quantity</string>
     <string name="more">More</string>
+    <string name="addButtonTooltip">Create new Treatment Plan</string>
+    <string name="fillOutName">Please introduce a name with at least 3 characters</string>
+    <string name="selectFreq">Please select a frequency type</string>
+    <string name="selectForm">Please select a Form type</string>
 
     //Plan Creation End
 

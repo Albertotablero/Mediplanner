@@ -1,9 +1,7 @@
 package com.example.mediplanner.plan;
 
 import android.app.DatePickerDialog;
-import android.icu.text.ListFormatter;
 import android.os.Bundle;
-import android.telephony.IccOpenLogicalChannelResponse;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -32,13 +28,13 @@ import com.example.mediplanner.databinding.PlanFragmentViewBinding;
 import com.example.mediplanner.utils.HoursListViewAdapter;
 import com.example.mediplanner.utils.SpecificDateViewAdapter;
 import com.example.mediplanner.utils.SpinnerAdapter;
+import com.example.mediplanner.utils.TreatmentForm;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class PlanFragment extends DialogFragment {
 
@@ -51,7 +47,14 @@ public class PlanFragment extends DialogFragment {
 
     public PlanFragment() {
         super();
+        isNew = true;
         plan = new Plan();
+    }
+
+    public PlanFragment(Plan editPlan) {
+        super();
+        isNew = false;
+        plan = editPlan;
     }
 
     //Setting up view with binging
@@ -92,7 +95,7 @@ public class PlanFragment extends DialogFragment {
         });
 
         // Frequency Spinner
-        SpinnerAdapter freqSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.freq_type_array));
+        SpinnerAdapter freqSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.freq_type_array), true);
         freqSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         planBidnding.freqTypeSpinner.setAdapter(freqSpinAdapter);
 
@@ -151,33 +154,19 @@ public class PlanFragment extends DialogFragment {
                         }
 
                         // Monday
-                        TextView monButton = weeklyView.findViewById(R.id.mondayButton);
-                        monButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        monButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 0, monButton));
+                        setUpWeekButtons(weeklyView, R.id.mondayButton, 0, weeksActive);
                         // Tuesday
-                        TextView tueButton = weeklyView.findViewById(R.id.tuesdayButton);
-                        tueButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        tueButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 1, tueButton));
+                        setUpWeekButtons(weeklyView, R.id.tuesdayButton, 1, weeksActive);
                         // Wednesday
-                        TextView wedButton = weeklyView.findViewById(R.id.wednesdayButton);
-                        wedButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        wedButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 2, wedButton));
+                        setUpWeekButtons(weeklyView, R.id.wednesdayButton, 2, weeksActive);
                         // Thursday
-                        TextView thuButton = weeklyView.findViewById(R.id.thursdayButton);
-                        thuButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        thuButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 3, thuButton));
+                        setUpWeekButtons(weeklyView, R.id.thursdayButton, 3, weeksActive);
                         // Friday
-                        TextView friButton = weeklyView.findViewById(R.id.fridayButton);
-                        friButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        friButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 4, friButton));
+                        setUpWeekButtons(weeklyView, R.id.fridayButton, 4, weeksActive);
                         // Saturday
-                        TextView satButton = weeklyView.findViewById(R.id.saturdayButton);
-                        satButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        satButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 5, satButton));
+                        setUpWeekButtons(weeklyView, R.id.saturdayButton, 5, weeksActive);
                         // Sunday
-                        TextView sunButton = weeklyView.findViewById(R.id.sundayButton);
-                        sunButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
-                        sunButton.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 6, sunButton));
+                        setUpWeekButtons(weeklyView, R.id.mondayButton, 6, weeksActive);
 
                         //Managing the hour for the treatment
                         ArrayList<String> hour = new ArrayList<>();
@@ -186,12 +175,12 @@ public class PlanFragment extends DialogFragment {
 
                         Spinner hoursSpinner = weeklyView.findViewById(R.id.spinnerHours);
                         String[] hoursArray = new String[hour.size()];
-                        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(hoursArray));
+                        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(hoursArray), false);
                         hoursSpinner.setAdapter(hourSpinAdpt);
 
                         Spinner minutesSpinner = weeklyView.findViewById(R.id.spinnerMinutes);
                         String[] minutesArray = new String[hour.size()];
-                        SpinnerAdapter minutesSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(minutesArray));
+                        SpinnerAdapter minutesSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(minutesArray), false);
                         minutesSpinner.setAdapter(minutesSpinAdpt);
 
                         child = weeklyView;
@@ -201,7 +190,6 @@ public class PlanFragment extends DialogFragment {
                         planBidnding.StartDateTextView.setVisibility(View.INVISIBLE);
                         planBidnding.startDate.setVisibility(View.INVISIBLE);
                         planBidnding.calendarDialogButton.setVisibility(View.INVISIBLE);
-
                         ListView specificDatesListView = new ListView(getContext());
 
                         String dateFormat = "%1$02d/%2$02d/%3$4d";
@@ -240,31 +228,84 @@ public class PlanFragment extends DialogFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Log.d("Meh", "onNothingSelected: ");
+
+            }
+
+            public void setUpWeekButtons(RelativeLayout weeklyView, int buttonID, int i, ArrayList<Boolean> weeksActive) {
+                TextView b = weeklyView.findViewById(buttonID);
+                b.setBackgroundColor(getResources().getColor(R.color.weekButtonOff, getActivity().getTheme()));
+                b.setOnClickListener(e -> changeWeekButtonSate(weeksActive, 0, b));
+
             }
         });
 
         // Treatment Form Spinner
-        SpinnerAdapter formSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.form_type_array));
+        SpinnerAdapter formSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.form_type_array), true);
         formSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         planBidnding.formTypeSpinner.setAdapter(formSpinAdapter);
 
+        planBidnding.formTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 2:
+                        planBidnding.quantityEditText.setVisibility(View.VISIBLE);
+                        planBidnding.quantityTextView.setVisibility(View.VISIBLE);
+                        planBidnding.quantityMetricSpinner.setVisibility(View.VISIBLE);
+
+                        SpinnerAdapter quantityLiquidAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.quantity_metric_array_liquid), false);
+                        planBidnding.quantityMetricSpinner.setAdapter(quantityLiquidAdapter);
+                        break;
+                    case 5:
+                        planBidnding.quantityEditText.setVisibility(View.VISIBLE);
+                        planBidnding.quantityTextView.setVisibility(View.VISIBLE);
+                        planBidnding.quantityMetricSpinner.setVisibility(View.VISIBLE);
+                        SpinnerAdapter quantityInjectionAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.quantity_metric_array_injection), false);
+                        planBidnding.quantityMetricSpinner.setAdapter(quantityInjectionAdapter);
+                        break;
+                    case 6:
+                        planBidnding.quantityEditText.setVisibility(View.INVISIBLE);
+                        planBidnding.quantityTextView.setVisibility(View.INVISIBLE);
+                        planBidnding.quantityMetricSpinner.setVisibility(View.INVISIBLE);
+                        break;
+                    default:
+
+                        planBidnding.quantityMetricSpinner.setVisibility(View.INVISIBLE);
+                        planBidnding.quantityEditText.setVisibility(View.VISIBLE);
+                        planBidnding.quantityTextView.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //Save Button
         planBidnding.savePlanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // rellenar esta mierda
-                getParentFragmentManager().beginTransaction().remove(PlanFragment.this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
-                savePlan(isNew);
-
+                // Checking importa data is introduced
+                // TODO check for frequency
+                if (planBidnding.nameTextInput.getText() == null || planBidnding.nameTextInput.getText().length() < 3) {
+                    Toast.makeText(getContext(), R.string.fillOutName, Toast.LENGTH_SHORT).show();
+                } else if (planBidnding.freqTypeSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getContext(), R.string.selectFreq, Toast.LENGTH_SHORT).show();
+                } else if (planBidnding.formTypeSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getContext(), R.string.selectForm, Toast.LENGTH_SHORT).show();
+                } else {
+                    savePlan();
+                    getParentFragmentManager().beginTransaction().remove(PlanFragment.this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
+                }
             }
         });
     }
 
     private void changeWeekButtonSate(ArrayList<Boolean> daysActive, int dayOfWeek, TextView weekdayButton) {
         daysActive.set(dayOfWeek, !daysActive.get(dayOfWeek));
-        Toast.makeText(getContext(), "" + daysActive.get(dayOfWeek), Toast.LENGTH_SHORT).show();
+
 
         if (daysActive.get(dayOfWeek)) {
             weekdayButton.setBackgroundColor(getResources().getColor(R.color.weekButtonOn, getActivity().getTheme()));
@@ -274,7 +315,7 @@ public class PlanFragment extends DialogFragment {
         }
     }
 
-    //uhhhhh size and shit??
+    //uhhhhh size??
     @Override
     public void onResume() {
         super.onResume();
@@ -286,17 +327,28 @@ public class PlanFragment extends DialogFragment {
 
     }
 
-    private void savePlan(boolean isNew) {
+    private void savePlan() {
+        plan.setActive(true);
+
         plan.setName(planBidnding.nameTextInput.getText().toString());
         try {
             plan.setDetails(planBidnding.detailsTextInput.getText().toString());
         } catch (NullPointerException e) {
             plan.setDetails("");
         }
-        plan.setActive(true);
-        //Frequency i don't even know yet
         plan.setFrequencyMetric(planBidnding.freqTypeSpinner.getSelectedItemPosition());
-        //plan.setStartDate(planBidnding.startDate.get);
+
+        plan.setStartDate(LocalDate.parse(planBidnding.startDate.getText().toString()));
+        plan.setForm(planBidnding.formTypeSpinner.getSelectedItemPosition());
+
+        if (plan.getForm() == TreatmentForm.LIQUID || plan.getForm() == TreatmentForm.INJECTION) {
+            plan.setQuantity(Float.parseFloat(planBidnding.quantityEditText.getText().toString()));
+            plan.setQuantityMetric(planBidnding.quantityMetricSpinner.getSelectedItem().toString());
+        } else if (plan.getForm() != TreatmentForm.CREAM) {
+            plan.setQuantity(Float.parseFloat(planBidnding.quantityEditText.getText().toString()));
+        }
+
+
     }
 
 

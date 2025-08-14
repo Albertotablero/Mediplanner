@@ -1,7 +1,7 @@
 package com.example.mediplanner.utils;
 
 public enum FrequencyMetric {
-    HOURLY(0), DAILY(1), WEEKLY(2), MONTHLY(3), YEARLY(4), SPECIFFICDATES(5), ASNEEDED(6);
+    HOURLY(1), DAILY(2), WEEKLY(3), MONTHLY(4), YEARLY(5), SPECIFFICDATES(6), ASNEEDED(7);
 
     public int getValue() {
         return value;

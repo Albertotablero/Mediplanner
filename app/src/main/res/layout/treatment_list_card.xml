@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_margin="5dp"
-        android:text="Placeholder hello world"
+        android:maxLines="2"
+        android:minLines="2"
         android:textStyle="bold" />
 
     <ImageView
@@ -27,9 +28,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/iconTreatments"
+        android:layout_alignParentLeft="true"
         android:layout_margin="5dp"
-        android:layout_toLeftOf="@id/moreTreatmentsTextView"
-        android:text="Detalles sobre el tratamientom, esto es un placeholder, si lo ves, lo siento" />
+        android:layout_toLeftOf="@id/moreTreatmentsTextView" />
 
     <TextView
         android:id="@+id/moreTreatmentsTextView"
