@@ -66,16 +66,22 @@ public class TreatmentsTabFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (selectedListItem != position) {
+                    // All this just to change the text color of individual elements when the card is selected or not
                     if (selectedListItem != -1) {
                         View previeous = binding.treatmentPlansListView.getChildAt(selectedListItem);
                         previeous.findViewById(R.id.nameTreatmentsTextView).setActivated(false);
                         previeous.findViewById(R.id.descriptionTreatments).setActivated(false);
+                        previeous.findViewById(R.id.quantityTextView).setActivated(false);
+                        previeous.findViewById(R.id.quantityMetricTextView).setActivated(false);
+
                     }
                     selectedListItem = position;
 
                     View current = binding.treatmentPlansListView.getChildAt(position);
                     current.findViewById(R.id.nameTreatmentsTextView).setActivated(true);
                     current.findViewById(R.id.descriptionTreatments).setActivated(true);
+                    current.findViewById(R.id.quantityTextView).setActivated(true);
+                    current.findViewById(R.id.quantityMetricTextView).setActivated(true);
 
                 }
 
@@ -108,7 +114,7 @@ public class TreatmentsTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (selectedListItem != -1) {
-                    new AlertDialog.Builder(getContext()).setTitle(R.string.removeHourWarningTitle).setMessage(R.string.removeHourPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    new AlertDialog.Builder(getContext()).setTitle(R.string.removeTreatmentWarningTitle).setMessage(R.string.removeTreatmentPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
                             treatmentPlans.remove(selectedListItem);
@@ -121,7 +127,7 @@ public class TreatmentsTabFragment extends Fragment {
                 }
             }
         });
-        Log.d("FragmentTag", "onViewCreated: "+getTag());
+        Log.d("FragmentTag", "onViewCreated: " + getTag());
 
     }
 
