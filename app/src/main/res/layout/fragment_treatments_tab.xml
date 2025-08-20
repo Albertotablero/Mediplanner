@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".treatments.TreatmentsTabFragment">
+    tools:context=".treatments.TreatmentsTabFragment"
+    android:tag="treatment_tab_fragment">
 
 
     <ListView
@@ -22,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/Edit" />
 
     <Button
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/editButton"
         android:text="@string/Delete" />
 </RelativeLayout>

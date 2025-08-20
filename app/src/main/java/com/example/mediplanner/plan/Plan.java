@@ -26,13 +26,16 @@ public class Plan {
     private ArrayList<Boolean> weekdaysActive;
 
 
-    public Plan(String name, String details, boolean isActive, int fMetric,
+    public Plan(String name, String details, boolean isActive, int freqMetric, int form, float quantity, String quantityMetric,
                 LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
         initialize();
         setName(name);
         setDetails(details);
         setActive(isActive);
-        setFrequencyMetric(fMetric);
+        setFrequencyMetric(freqMetric);
+        setQuantity(quantity);
+        setQuantityMetric(quantityMetric);
+        setForm(form);
         setPermanent(isPermanent);
         setStartDate(startDate);
     }

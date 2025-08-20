@@ -1,10 +1,9 @@
 package com.example.mediplanner.plan;
 
 import android.app.DatePickerDialog;
-import android.opengl.Visibility;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
-import com.example.mediplanner.utils.FrequencyMetric;
+import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
+import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.utils.HoursListViewAdapter;
 import com.example.mediplanner.utils.SpecificDateViewAdapter;
 import com.example.mediplanner.utils.SpinnerAdapter;
@@ -36,28 +35,36 @@ import com.example.mediplanner.utils.TreatmentForm;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class PlanFragment extends DialogFragment {
 
     private PlanFragmentViewBinding planBidnding;
     private Plan plan;
     private DatePickerDialog datePickerDialog;
+    private ListView planList;
 
     // Check if creating plan or editing existing
     private boolean isNew;
+    private boolean isCanceled = false;
 
-    public PlanFragment() {
+    private CloseListener closeListener;
+
+    public PlanFragment(CloseListener closeListener) {
         super();
         isNew = true;
         plan = new Plan();
+        this.closeListener = closeListener;
     }
 
-    public PlanFragment(Plan editPlan) {
+    public PlanFragment(Plan plan, ListView treatmentPlansListView) {
         super();
         isNew = false;
-        plan = editPlan;
+        this.plan = plan;
+        planList = treatmentPlansListView;
     }
 
     //Setting up view with binging
@@ -75,7 +82,11 @@ public class PlanFragment extends DialogFragment {
         planBidnding.detailsTextInput.setHint(getResources().getString(R.string.treatment_details_prompt));
 
         // Setting up a date picker cause why not I fucking guess
-        planBidnding.startDate.setText(Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "/" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "/" + Calendar.getInstance().get(Calendar.YEAR));
+        if (isNew) {
+            LocalDate startDate = LocalDate.now();
+            planBidnding.startDate.setText(String.format(Locale.getDefault(), "%1$02d/%2$02d/%3$4d", startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
+        }
+
         planBidnding.calendarDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,6 +316,19 @@ public class PlanFragment extends DialogFragment {
                 }
             }
         });
+
+        // Cancel button because of reasons anyways....
+        planBidnding.cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isCanceled = true;
+                getParentFragmentManager().beginTransaction().remove(PlanFragment.this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
+            }
+        });
+
+        if (!isNew) loadPlanInfo(plan);
+
+
     }
 
     private void changeWeekButtonSate(ArrayList<Boolean> daysActive, int dayOfWeek, TextView weekdayButton) {
@@ -368,11 +392,100 @@ public class PlanFragment extends DialogFragment {
             plan.setQuantity(Float.parseFloat(planBidnding.quantityEditText.getText().toString()));
         }
 
-        MainActivity.getTreatmentPlanList().add(plan);
+        // Notifying the Listview of changes
+        if (!isNew) {
+            TreatmentsArrayAdapter adapter = (TreatmentsArrayAdapter) planList.getAdapter();
+            adapter.notifyDataSetChanged();
+        }
+
     }
 
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    private void loadPlanInfo(Plan plan) {
+        planBidnding.nameTextInput.setText(plan.getName());
+        if (!plan.getDetails().isEmpty()) planBidnding.detailsTextInput.setText(plan.getDetails());
+
+        switch (plan.getFrequencyMetric()) {
+            case HOURLY:
+                planBidnding.freqTypeSpinner.setSelection(1);
+                break;
+            case DAILY:
+                planBidnding.freqTypeSpinner.setSelection(2);
+                break;
+            case WEEKLY:
+                planBidnding.freqTypeSpinner.setSelection(3);
+                break;
+            case MONTHLY:
+                planBidnding.freqTypeSpinner.setSelection(4);
+                break;
+            case YEARLY:
+                planBidnding.freqTypeSpinner.setSelection(5);
+                break;
+            case ASNEEDED:
+                planBidnding.freqTypeSpinner.setSelection(6);
+                break;
+            case SPECIFFICDATES:
+                planBidnding.freqTypeSpinner.setSelection(7);
+                break;
+            default:
+                planBidnding.freqTypeSpinner.setSelection(0);
+                break;
+        }
+
+        LocalDate startDate = plan.getStartDate();
+        planBidnding.startDate.setText(String.format(Locale.getDefault(), "%1$02d/%2$02d/%3$4d", startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
+
+        switch (plan.getForm()) {
+            case PILLS:
+                planBidnding.formTypeSpinner.setSelection(1);
+                break;
+            case LIQUID:
+                planBidnding.formTypeSpinner.setSelection(2);
+                break;
+            case DROPS:
+                planBidnding.formTypeSpinner.setSelection(3);
+                break;
+            case INHALER:
+                planBidnding.formTypeSpinner.setSelection(4);
+                break;
+            case INJECTION:
+                planBidnding.formTypeSpinner.setSelection(5);
+                break;
+            case CREAM:
+                planBidnding.formTypeSpinner.setSelection(6);
+                break;
+            case PATCHES:
+                planBidnding.formTypeSpinner.setSelection(7);
+                break;
+            case PACKET:
+                planBidnding.formTypeSpinner.setSelection(8);
+                break;
+        }
+
+        DecimalFormat format = new DecimalFormat("#.##");
+        planBidnding.quantityEditText.setText(format.format(plan.getQuantity()));
+    }
 
     public void setNew(boolean aNew) {
         isNew = aNew;
     }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        closeListener.OnClose(isCanceled);
+    }
 }
+

@@ -10,7 +10,7 @@
     <string name="name">Nombre</string>
     <string name="frequency">Frecuencia</string>
     <string name="frequency_type">Tipo</string>
-    <string name="removeHourWarnignTitle">Eliminar Hora</string>
+    <string name="removeHourWarningTitle">Eliminar Hora</string>
     <string name="removeHourPrompt">¿Seguro que desea eliminar esta Hora?</string>
     <string name="monday">L</string>
     <string name="tuesday">M</string>
@@ -68,5 +68,8 @@
     <string name="fillOutName">Por favor introduzca un nombre con al menos 3 carácteres</string>
     <string name="selectFreq">Por favor seleccione un tipo de Frecuencia</string>
     <string name="selectForm">Por favor seleccione el Medio</string>
+    <string name="no_item_selected_warning">Por favor seleccione un plan de tratamiento primero.</string>
+    <string name="removeTreatmentWarningTitle">Eliminar Plan de Tratamiento</string>
+    <string name="removeTreatmentPrompt">¿Seguro que desea eliminar este Plan de Tratamiento?</string>
 
 </resources>

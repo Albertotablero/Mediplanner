@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -99,7 +98,7 @@ public class HoursListViewAdapter extends ArrayAdapter<String> {
 
     private void removeHour(View e, int position) {
         // Confirmation prompt for deletion
-        new AlertDialog.Builder(getContext()).setTitle(R.string.removeHourWarnignTitle).setMessage(R.string.removeHourPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getContext()).setTitle(R.string.removeHourWarningTitle).setMessage(R.string.removeHourPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int whichButton) {
                 remove(getItem(position));

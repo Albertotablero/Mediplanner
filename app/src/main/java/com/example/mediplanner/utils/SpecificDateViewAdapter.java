@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,8 +19,6 @@ import androidx.annotation.Nullable;
 import com.example.mediplanner.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 public class SpecificDateViewAdapter extends ArrayAdapter<String> {
 
@@ -73,7 +70,7 @@ public class SpecificDateViewAdapter extends ArrayAdapter<String> {
 
     private void removeDate(View e, int position) {
         // Confirmation prompt for deletion
-        new AlertDialog.Builder(getContext()).setTitle(R.string.removeHourWarnignTitle).setMessage(R.string.removeHourPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getContext()).setTitle(R.string.removeHourWarningTitle).setMessage(R.string.removeHourPrompt).setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int whichButton) {
                 remove(getItem(position));

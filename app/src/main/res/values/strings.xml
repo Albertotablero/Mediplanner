@@ -6,6 +6,8 @@
     <string name="treatment_tab">Treatment</string>
     <string name="add">add</string>
 
+    //Treatments tab
+    <string name="no_item_selected_warning">Please select a Treatment Plan to first.</string>
     //Plan creation and edition fragment ui strings
     <string name="new_plan_tittle">Add new treatment plan</string>
     <string name="edit_plan_tittle">Edit treatment plan</string>
@@ -15,6 +17,8 @@
 
     <string name="treatment_details">Details</string>
     <string name="treatment_details_prompt">Important details about the treatment (how to take, etc.)</string>
+    <string name="removeTreatmentWarningTitle">Remove Treatment Plan</string>
+    <string name="removeTreatmentPrompt">Are you sure you want to remove this Treatment Plan?</string>
 
     <string name="start_date">Start Date</string>
 
@@ -28,12 +32,12 @@
         <item name="weekly_frequency">Weekly</item>
         <item name="monthly_frequency">Monthly</item>
         <item name="annually_frequency">Annually</item>
-        <item name="speciffic_frequency">Días Específicos</item>
+        <item name="specific_frequency">Specific Days</item>
         <item name="as_needed">As needed</item>
     </string-array>
     <string name="dailyFreqTextView">When to set reminder</string>
     <string name="dailyFreqHintText">How often</string>
-    <string name="removeHourWarnignTitle">Remove hour</string>
+    <string name="removeHourWarningTitle">Remove hour</string>
     <string name="removeHourPrompt">Are you sure you want to remove this Hour?</string>
 
     <string name="monday">M</string>

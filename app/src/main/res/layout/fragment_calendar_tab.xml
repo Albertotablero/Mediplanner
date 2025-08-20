@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="calendar_tab_fragment"
     tools:context=".calendar.CalendarTabFragment">
 
     <!-- TODO: Update blank fragment layout -->

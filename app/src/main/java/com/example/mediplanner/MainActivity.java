@@ -2,26 +2,29 @@ package com.example.mediplanner;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.mediplanner.calendar.CalendarTabFragment;
 import com.example.mediplanner.databinding.ActivityMainBinding;
+import com.example.mediplanner.treatments.TreatmentsTabFragment;
+import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.PlanFragment;
+import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
+import com.example.mediplanner.utils.FrequencyMetric;
+import com.example.mediplanner.utils.TabStageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 
@@ -35,13 +38,32 @@ public class MainActivity extends AppCompatActivity {
     private TabStageAdapter tabStageAdapter;
     private ViewPager2 viewPager;
 
-    private Fragment calendarTabFragment;
+    private static CalendarTabFragment calendarTabFragment;
+    private static TreatmentsTabFragment treatmentsTabFragment;
 
-    private Fragment treatmentsTabFragment;
+    public static CalendarTabFragment getCalendarTabFragment() {
+        return calendarTabFragment;
+    }
+
+    public static void setCalendarTabFragment(CalendarTabFragment calendarTabFragment) {
+        MainActivity.calendarTabFragment = calendarTabFragment;
+    }
+
+    public static TreatmentsTabFragment getTreatmentsTabFragment() {
+        return treatmentsTabFragment;
+    }
+
+    public static void setTreatmentsTabFragment(TreatmentsTabFragment treatmentsTabFragment) {
+        MainActivity.treatmentsTabFragment = treatmentsTabFragment;
+    }
 
     private PlanFragment planFragment;
 
     private static ArrayList<Plan> treatmentPlanList;
+
+    public static ArrayList<Plan> getTreatmentPlanList() {
+        return treatmentPlanList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
         mainActivityBinding = ActivityMainBinding.inflate(getLayoutInflater());
         View mainView = mainActivityBinding.getRoot();
         setContentView(mainView);
+
+        treatmentPlanList = new ArrayList<>();
+        // TODO temp, remove after testing
+        treatmentPlanList.add(new Plan("meh", "meh", true, 0, 1, 0, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("meh", "meh", true, 2, 2, 200.5f, "Ml", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("meh", "meh", true, 0, 1, 4, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
 
         //Setting up fragments
         fragmentManager = getSupportFragmentManager();
@@ -67,26 +96,25 @@ public class MainActivity extends AppCompatActivity {
         tabStageAdapter = new TabStageAdapter(this);
         viewPager = mainActivityBinding.pager;
         viewPager.setAdapter(tabStageAdapter);
+        viewPager.setOffscreenPageLimit(2);
 
-        mainActivityBinding.mainTabView.addOnTabSelectedListener(
-                new TabLayout.OnTabSelectedListener() {
+        mainActivityBinding.mainTabView.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        viewPager.setCurrentItem(tab.getPosition());
-                    }
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
-                    @Override
-                    public void onTabUnselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                    }
+            }
 
-                    @Override
-                    public void onTabReselected(TabLayout.Tab tab) {
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
-                    }
-                }
-        );
+            }
+        });
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -96,25 +124,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         //Other Interface elements
         mainActivityBinding.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("testing", "hmm ok");
-                //Plan creator // editor fragment
-                planFragment = (PlanFragment) fragmentManager.getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.plan.PlanFragment");
+
+                //Plan creation fragment
+                planFragment = new PlanFragment(new CloseListener() {
+                    @Override
+                    public void OnClose(boolean isCanceled) {
+                        if (!isCanceled) {
+                            TreatmentsArrayAdapter tAAdapter = (TreatmentsArrayAdapter) treatmentsTabFragment.getBinding().treatmentPlansListView.getAdapter();
+                            tAAdapter.add(planFragment.getPlan());
+                            tAAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                });
                 planFragment.setNew(true);
-                fragmentManager.beginTransaction().add(planFragment, "planF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(planFragment).commit();
+                planFragment.setCancelable(false);
+                fragmentManager.beginTransaction().add(planFragment, "PlanCreation").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).show(planFragment).commit();
+
             }
         });
-
-        treatmentPlanList = new ArrayList<>();
         /*
          *  TODO Load list from save file
          * */
-    }
-
-    public static ArrayList<Plan> getTreatmentPlanList() {
-        return treatmentPlanList;
     }
 }
