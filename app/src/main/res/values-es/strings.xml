@@ -60,6 +60,17 @@
     <string name="treatment_tab">Tratamiento</string>
     <string name="Delete">Borrar</string>
     <string name="Edit">Editar</string>
+    <string name="january">Enero</string>
+    <string name="february">Febrero</string>
+    <string name="march">Marzo</string>
+    <string name="april">Abril</string>
+    <string name="may">Mayo</string>
+    <string name="june">Junio</string>
+    <string name="july">Julio</string>
+    <string name="august">Agosto</string>
+    <string name="september">Septiembre</string>
+    <string name="october">Octubre</string>
+    <string name="november">Noviembre</string>
     <string name="removeDateWarnignTitle">Eliminar Fecha</string>
     <string name="removeDatePrompt">¿Seguro que desea eliminar esta fecha?</string>
     <string name="quantity">Cantidad</string>
@@ -71,5 +82,6 @@
     <string name="no_item_selected_warning">Por favor seleccione un plan de tratamiento primero.</string>
     <string name="removeTreatmentWarningTitle">Eliminar Plan de Tratamiento</string>
     <string name="removeTreatmentPrompt">¿Seguro que desea eliminar este Plan de Tratamiento?</string>
+    <string name="december">Diciembre</string>
 
 </resources>

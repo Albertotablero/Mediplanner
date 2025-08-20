@@ -25,11 +25,7 @@ import com.example.mediplanner.plan.PlanFragment;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TreatmentsTabFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TreatmentsTabFragment extends Fragment {
 
     private FragmentTreatmentsTabBinding binding;
@@ -38,7 +34,6 @@ public class TreatmentsTabFragment extends Fragment {
     private TreatmentsArrayAdapter treatmentListVAdapter;
 
     public TreatmentsTabFragment() {
-        // Required empty public constructor
     }
 
     public static TreatmentsTabFragment newInstance() {

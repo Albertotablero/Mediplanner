@@ -17,15 +17,14 @@ public class TabStageAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position) {
-            case 1:
-                TreatmentsTabFragment treatmentsTabFragment = new TreatmentsTabFragment();
-                MainActivity.setTreatmentsTabFragment(treatmentsTabFragment);
-                return treatmentsTabFragment;
-            default:
-                CalendarTabFragment calendarTabFragment = new CalendarTabFragment();
-                MainActivity.setCalendarTabFragment(calendarTabFragment);
-                return calendarTabFragment;
+        if (position == 1) {
+            TreatmentsTabFragment treatmentsTabFragment = new TreatmentsTabFragment();
+            MainActivity.setTreatmentsTabFragment(treatmentsTabFragment);
+            return treatmentsTabFragment;
+        } else {
+            CalendarTabFragment calendarTabFragment = new CalendarTabFragment();
+            MainActivity.setCalendarTabFragment(calendarTabFragment);
+            return calendarTabFragment;
         }
 
     }

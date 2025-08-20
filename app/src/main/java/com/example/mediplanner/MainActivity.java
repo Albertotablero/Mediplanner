@@ -96,7 +96,8 @@ public class MainActivity extends AppCompatActivity {
         tabStageAdapter = new TabStageAdapter(this);
         viewPager = mainActivityBinding.pager;
         viewPager.setAdapter(tabStageAdapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setCurrentItem(0);
 
         mainActivityBinding.mainTabView.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 

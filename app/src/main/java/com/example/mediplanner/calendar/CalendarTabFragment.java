@@ -2,65 +2,83 @@ package com.example.mediplanner.calendar;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mediplanner.R;
+import com.example.mediplanner.databinding.FragmentCalendarTabBinding;
+import com.example.mediplanner.databinding.FragmentTreatmentsTabBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CalendarTabFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.joda.time.LocalDate;
+
+import java.util.Locale;
+
+
 public class CalendarTabFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FragmentCalendarTabBinding binding;
+    private LocalDate selectedDate;
 
     public CalendarTabFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CalendarTabFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CalendarTabFragment newInstance(String param1, String param2) {
-        CalendarTabFragment fragment = new CalendarTabFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        selectedDate = LocalDate.now();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+
+        binding.monthDislpayed.setText(getMonthName(selectedDate.getMonthOfYear()));
+        binding.yeardisplayed.setText(String.format(Locale.getDefault(), "%4d", selectedDate.getYear()));
+
+    }
+
+    private String getMonthName(int monthNumber) {
+        switch (monthNumber) {
+            case 1:
+                return getResources().getString(R.string.january);
+            case 2:
+                return getResources().getString(R.string.february);
+            case 3:
+                return getResources().getString(R.string.march);
+            case 4:
+                return getResources().getString(R.string.april);
+            case 5:
+                return getResources().getString(R.string.may);
+            case 6:
+                return getResources().getString(R.string.june);
+            case 7:
+                return getResources().getString(R.string.july);
+            case 8:
+                return getResources().getString(R.string.august);
+            case 9:
+                return getResources().getString(R.string.september);
+            case 10:
+                return getResources().getString(R.string.october);
+            case 11:
+                return getResources().getString(R.string.november);
+            case 12:
+                return getResources().getString(R.string.december);
+            default:
+                return "";
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar_tab, container, false);
+        binding = FragmentCalendarTabBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
     }
 }

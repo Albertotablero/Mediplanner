@@ -7,6 +7,16 @@
     android:textAlignment="center"
     tools:context=".calendar.CalendarTabFragment">
 
+    <ListView
+        android:id="@+id/daysTreatmentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/calendarTL"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="64dp"
+        android:background="@color/light_purple" />
+
     <LinearLayout
         android:id="@+id/yearAndMonthView"
         android:layout_width="wrap_content"
@@ -23,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Month"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -33,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Year"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -45,68 +53,141 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/yearAndMonthView"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="2dp">
 
         <TableRow
+            android:id="@+id/headerRow"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="#2A2A2A">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/mondayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/monday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tuesdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/tuesday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/wednesdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/wednesday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/thursdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/thursday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/fridayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/friday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/saturdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
-                android:text="@string/sunday"
+                android:background="#F6F6F6"
+                android:text="@string/saturday"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/sundayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="1dp"
+                android:layout_marginVertical="1dp"
                 android:layout_weight="1"
+                android:background="#F6F6F6"
                 android:text="@string/sunday"
                 android:textAlignment="center" />
+
         </TableRow>
+
+        <TableRow
+            android:id="@+id/calendarRow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
+
+        <TableRow
+            android:id="@+id/calendarRow2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
+
+        <TableRow
+            android:id="@+id/calendarRow3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
+
+        <TableRow
+            android:id="@+id/calendarRow4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
+
+        <TableRow
+            android:id="@+id/calendarRow5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
+
+        <TableRow
+            android:id="@+id/calendarRow6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="2dp"
+            android:background="#2A2A2A"
+            android:visibility="invisible" />
 
     </TableLayout>
 </RelativeLayout>
