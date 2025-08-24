@@ -14,7 +14,8 @@
         android:layout_below="@id/calendarTL"
         android:layout_marginHorizontal="2dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="64dp" />
+        android:layout_marginBottom="64dp"
+        android:background="@color/light_grey" />
 
     <LinearLayout
         android:id="@+id/yearAndMonthView"
@@ -54,13 +55,19 @@
         android:layout_below="@id/yearAndMonthView"
         android:layout_alignParentStart="true"
         android:layout_marginHorizontal="2dp"
+        android:background="@color/light_grey"
+        android:paddingLeft="1dp"
+        android:paddingTop="1dp"
+        android:paddingRight="1dp"
+        android:paddingBottom="1dp"
         android:stretchColumns="*">
 
         <TableRow
             android:id="@+id/headerRow"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="#2A2A2A">
+            android:background="@color/light_grey"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/mondayTextV"
@@ -152,6 +159,7 @@
             android:id="@+id/calendarRow1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 
@@ -159,6 +167,7 @@
             android:id="@+id/calendarRow2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 
@@ -166,6 +175,7 @@
             android:id="@+id/calendarRow3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 
@@ -173,6 +183,7 @@
             android:id="@+id/calendarRow4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 
@@ -180,6 +191,7 @@
             android:id="@+id/calendarRow5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 
@@ -187,6 +199,7 @@
             android:id="@+id/calendarRow6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:textAlignment="center"
             android:visibility="invisible" />
 

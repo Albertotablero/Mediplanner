@@ -102,5 +102,8 @@
 
     //Plan Creation End
 
+    //Daily treatments list
+    <string name="complete">Complete</string>
+    <string name="ignore">Ignore</string>
 
 </resources>

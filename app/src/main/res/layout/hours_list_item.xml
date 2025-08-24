@@ -5,8 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <Spinner
-        android:id="@+id/spinnerHours"
+    <NumberPicker
+        android:id="@+id/pickerHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -14,15 +14,15 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/spinnerHours"
-        android:layout_toEndOf="@id/spinnerHours"
+        android:layout_alignBaseline="@id/pickerHours"
+        android:layout_toEndOf="@id/pickerHours"
         android:text=":" />
 
-    <Spinner
-        android:id="@+id/spinnerMinutes"
+    <NumberPicker
+        android:id="@+id/pickerMinutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/spinnerHours"
+        android:layout_alignBaseline="@id/pickerHours"
         android:layout_toEndOf="@id/textView2" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignBaseline="@id/textView2"
-        android:layout_toEndOf="@id/spinnerMinutes"
+        android:layout_toEndOf="@id/pickerMinutes"
         android:background="@android:color/transparent"
         android:minWidth="25dip"
         android:text="x"

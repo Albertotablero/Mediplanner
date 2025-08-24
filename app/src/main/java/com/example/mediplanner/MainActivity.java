@@ -1,7 +1,6 @@
 package com.example.mediplanner;
 
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mediplanner.calendar.CalendarTabFragment;
+import com.example.mediplanner.calendar.DayTreatmentPlansFiller;
 import com.example.mediplanner.calendar.Month;
 import com.example.mediplanner.databinding.ActivityMainBinding;
 import com.example.mediplanner.treatments.TreatmentsTabFragment;
@@ -30,7 +30,6 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     // view binding
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private static ArrayList<Month> savedMonths = new ArrayList<>();
     private static HashMap<String, Month> storedMonths = new HashMap<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
         treatmentPlanList = new ArrayList<>();
         // TODO temp, remove after testing
-        treatmentPlanList.add(new Plan("meh", "meh", true, 0, 1, 0, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
-        treatmentPlanList.add(new Plan("meh", "meh", true, 2, 2, 200.5f, "Ml", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("Concerta 30g", "Tomar por la mañana con el desayuno.", true, 1, 1, 1, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("Loratadina", "Tomar por la noche.", true, 1, 1, 1, "Pill", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
         treatmentPlanList.add(new Plan("meh", "meh", true, 0, 1, 4, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
         treatmentPlanList.add(new Plan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
 
@@ -143,6 +143,20 @@ public class MainActivity extends AppCompatActivity {
         /*
          *  TODO Load list from save file
          * */
+    }
+
+    public static void addMonth(Month month, String monthTag) {
+        storedMonths.put(monthTag, month);
+
+        for (Plan p :
+                treatmentPlanList) {
+            switch (p.getFrequencyMetric()) {
+                case DAILY:
+                    DayTreatmentPlansFiller.fillDailyPlan(p, month);
+                    break;
+            }
+        }
+
     }
 
     public static CalendarTabFragment getCalendarTabFragment() {

@@ -3,11 +3,15 @@ package com.example.mediplanner.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.icu.number.IntegerWidth;
+import android.icu.number.LocalizedNumberFormatter;
+import android.icu.number.NumberFormatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,79 +19,72 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mediplanner.R;
+import com.example.mediplanner.date.PlanHours;
+
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
+import org.joda.time.LocalDate;
+import org.joda.time.Minutes;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class HoursListViewAdapter extends ArrayAdapter<String> {
-    private ArrayList<String> specifiedHours;
-    private ArrayList<String> hours;
-    private ArrayList<String> minutes;
+public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
+    private ArrayList<PlanHours> specifiedHours;
+    private Hours hour;
+    private Minutes minutes;
 
-    public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<String> objects) {
+    public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<PlanHours> objects) {
         super(context, 0, objects);
 
         specifiedHours = objects;
+        hour = Hours.hours(DateTime.now().getHourOfDay());
+        minutes = Minutes.minutes(DateTime.now().getMinuteOfHour());
 
-        //preparing hours and minutes for spinners
-        hours = new ArrayList<>();
-        minutes = new ArrayList<>();
-        fillHoursAndMinutes(hours, minutes);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        String hour = getItem(position);
-        String[] time = hour.split(":");
-        int h = Integer.parseInt(time[0]);
-        int m = Integer.parseInt(time[1]);
-
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hours_list_item, parent, false);
 
-        //Setting up spinners with hours and minutes
-        Spinner hourSpinner = convertView.findViewById(R.id.spinnerHours);
-        String[] helpme1 = new String[hours.size()];
-        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hours.toArray(helpme1), false);
-
-        hourSpinner.setAdapter(hourSpinAdpt);
-        hourSpinner.setSelection(h);
-        // Updating the value in the stored list on item selection, otherwise selection changes to previous stored value when adding more elements to the list
-        hourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        //Setting up pickers with hours and minutes
+        NumberPicker hoursPicker = convertView.findViewById(R.id.pickerHours);
+        hoursPicker.setMinValue(00);
+        hoursPicker.setMaxValue(23);
+        hoursPicker.setFormatter(new NumberPicker.Formatter() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                specifiedHours.set(position, pos + ":" + m);
-
+            public String format(int value) {
+                return String.format(Locale.getDefault(), "%02d", value);
             }
-
+        });
+        hoursPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                hour = Hours.hours(view.getValue());
             }
         });
 
-        Spinner minuteSpinner = convertView.findViewById(R.id.spinnerMinutes);
-        String[] helpme = new String[minutes.size()];
-        SpinnerAdapter minuteSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, minutes.toArray(helpme), false);
+        NumberPicker minutesPicker = convertView.findViewById(R.id.pickerMinutes);
+        minutesPicker.setMinValue(00);
+        minutesPicker.setMaxValue(59);
 
-        minuteSpinner.setAdapter(minuteSpinAdpt);
-        minuteSpinner.setSelection(m);
-        minuteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+        minutesPicker.setFormatter(new NumberPicker.Formatter() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                specifiedHours.set(position, h + ":" + pos);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public String format(int value) {
+                return String.format(Locale.getDefault(), "%02d", value);
             }
         });
+        minutesPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+            @Override
+            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                minutes = Minutes.minutes(view.getValue());
+            }
+        });
+        hoursPicker.setValue(hour.getValue(0));
+        minutesPicker.setValue(minutes.getValue(0));
 
         // Manage button for removing an hour
         TextView removeItem = convertView.findViewById((R.id.removeHourButon));
@@ -106,17 +103,5 @@ public class HoursListViewAdapter extends ArrayAdapter<String> {
         }).setNegativeButton(android.R.string.no, null).show();
     }
 
-
-    static public void fillHoursAndMinutes(ArrayList<String> h, ArrayList<String> m) {
-        String format = "%02d";
-
-        for (int i = 0; i <= 24; i++) {
-            h.add(String.format(Locale.getDefault(), format, i));
-        }
-
-        for (int i = 0; i < 60; i++) {
-            m.add(String.format(Locale.getDefault(), format, i));
-        }
-    }
 
 }

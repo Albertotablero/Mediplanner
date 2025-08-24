@@ -9,19 +9,16 @@ public class Month {
 
     // list of days in the month
     private ArrayList<Week> weeks;
+    private ArrayList<Day> days;
     private int monthOfYear;
     private int year;
 
     public Month(int month, int year) {
         weeks = new ArrayList<>();
+        days = new ArrayList<>();
         setMonthOfYear(month);
         setYear(year);
         setUpDays();
-        // TODO Remove after testing
-        Log.d("Monthtesting", month + "");
-        Log.d("Monthtesting", weeks.size() + "");
-        Week lastWeek = weeks.get(weeks.size() - 1);
-        Log.d("Monthtesting", lastWeek.getDaysOfWeek().get(lastWeek.getDaysOfWeek().size() - 1).getDayOfMonth() + "");
     }
 
     private void setUpDays() {
@@ -32,19 +29,25 @@ public class Month {
         Week week = new Week();
 
         for (int i = 1; i <= monthLength; i++) {
+            Day newDay = new Day(i, dayOfWeek);
+            days.add(newDay);
             if (dayOfWeek == 1) { // if monay, new week and increment counter
                 week = new Week();
-                week.getDaysOfWeek().add(new Day(i, dayOfWeek));
+                week.getDaysOfWeek().add(newDay);
+
                 dayOfWeek++;
             } else if (dayOfWeek == 7) { // if sunday, add week and reset counter
-                week.getDaysOfWeek().add(new Day(i, dayOfWeek));
+                week.getDaysOfWeek().add(newDay);
                 weeks.add(week);
+
                 dayOfWeek = 1;
             } else if (i == monthLength) {
-                week.getDaysOfWeek().add(new Day(i, dayOfWeek));
+                week.getDaysOfWeek().add(newDay);
                 weeks.add(week);
+
             } else { // otherwise just increment counter
-                week.getDaysOfWeek().add(new Day(i, dayOfWeek));
+                week.getDaysOfWeek().add(newDay);
+
                 dayOfWeek++;
 
             }
@@ -70,5 +73,9 @@ public class Month {
 
     public ArrayList<Week> getWeeks() {
         return weeks;
+    }
+
+    public ArrayList<Day> getDays() {
+        return days;
     }
 }

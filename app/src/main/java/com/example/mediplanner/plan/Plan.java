@@ -1,5 +1,6 @@
 package com.example.mediplanner.plan;
 
+import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.utils.FrequencyMetric;
 import com.example.mediplanner.utils.TreatmentForm;
 
@@ -13,7 +14,7 @@ public class Plan {
     private String details = ""; //Important details to take note of
     private FrequencyMetric frequencyMetric; // How to measure frequency
     private LocalDate startDate; // Start date of treatment plan
-    private boolean isPermanent; // Whether is permanent as opossed to having a set duration
+    private boolean isPermanent; // Whether is permanent as opposed to having a set duration
     //private float duration; // Duration of the treatment plan
     private boolean isActive; // Whether the treatment plan is active or not
     private TreatmentForm form; // Form of the treatment (Medium of consumption)
@@ -22,7 +23,7 @@ public class Plan {
 
     //for specific treatment forms or frequencies
     private ArrayList<String> specificDates;
-    private ArrayList<String> dailyHours;
+    private ArrayList<PlanHours> planHours;
     private ArrayList<Boolean> weekdaysActive;
 
 
@@ -49,7 +50,7 @@ public class Plan {
         setStartDate(LocalDate.now());
         setActive(false);
 
-        dailyHours = new ArrayList<String>();
+        planHours = new ArrayList<>();
         weekdaysActive = new ArrayList<>();
         specificDates = new ArrayList<>();
     }
@@ -171,8 +172,8 @@ public class Plan {
         this.specificDates = specificDates;
     }
 
-    public ArrayList<String> getDailyHours() {
-        return dailyHours;
+    public ArrayList<PlanHours> getPlanHours() {
+        return planHours;
     }
 
     public ArrayList<Boolean> getWeekdaysActive() {

@@ -1,8 +1,5 @@
 package com.example.mediplanner.calendar;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,10 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
@@ -34,6 +29,8 @@ public class CalendarTabFragment extends Fragment {
     private int weekOfSelectedDay = 0;
     private DayFrameLayout selectedDayCell;
     private Day selectedDay;
+
+    private DayTreatmentsArrayAdapter arrayAdapter;
 
     public CalendarTabFragment() {
     }
@@ -63,11 +60,11 @@ public class CalendarTabFragment extends Fragment {
             if (i == 0 && week.getDaysOfWeek().get(0).getDayOfWeek() != 1) {
 
                 for (; j < week.getDaysOfWeek().get(0).getDayOfWeek(); j++) {
-                    generateCell(row, j, null, "-");
+                    generateCell(row, j, null, "");
                 }
             }
             for (; j < 7; j++) {
-                String dayOfMonth = "-";
+                String dayOfMonth = "";
                 Day day = null;
                 try {
                     day = week.getDaysOfWeek().get(y++);
@@ -81,7 +78,24 @@ public class CalendarTabFragment extends Fragment {
 
         }
         // Load plan data, good luck Alberto
-        
+
+        weekOfSelectedDay = findInitWeek(initDate);
+        TableRow row = (TableRow) binding.calendarTL.getChildAt(weekOfSelectedDay + 1);
+        int dayOfWeek = initDate.getDayOfWeek();
+        View child = row.getChildAt(dayOfWeek - 1);
+        child.callOnClick();
+
+    }
+
+    private int findInitWeek(LocalDate initDate) {
+        for (int i = 0; i < selectedMonth.getWeeks().size(); i++) {
+            for (Day d :
+                    selectedMonth.getWeeks().get(i).getDaysOfWeek()) {
+                if (d.getDayOfMonth() == initDate.getDayOfMonth())
+                    return i;
+            }
+        }
+        return 1;
     }
 
     private Month getMonth(int monthNumber, int year) {
@@ -92,7 +106,8 @@ public class CalendarTabFragment extends Fragment {
             month = MainActivity.getStoredMonths().get(monthTag);
         } else {
             month = new Month(monthNumber, year);
-            MainActivity.getStoredMonths().put(monthTag, month);
+
+            MainActivity.addMonth(month, monthTag);
         }
 
         return month;
@@ -104,6 +119,8 @@ public class CalendarTabFragment extends Fragment {
         TextView dayText = view.findViewById(R.id.dayTextView);
         view.setCellDay(day);
         dayText.setText(dayOfMonth);
+        TableRow.LayoutParams params = (TableRow.LayoutParams) view.getLayoutParams();
+        if (params != null) params.column = 1;
 
         view.setSelected(false);
         view.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +130,8 @@ public class CalendarTabFragment extends Fragment {
                 selectedDayCell = (DayFrameLayout) v;
                 selectedDayCell.setSelected(true);
                 selectedDay = selectedDayCell.getCellDay();
+                arrayAdapter = new DayTreatmentsArrayAdapter(getContext(), 0, selectedDay.getTreatmentusages(), selectedDay);
+                binding.daysTreatmentList.setAdapter(arrayAdapter);
             }
         });
         row.addView(view, j);

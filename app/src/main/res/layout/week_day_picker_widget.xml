@@ -108,7 +108,7 @@
         android:textColor="@color/black" />
 
     <Spinner
-        android:id="@+id/spinnerHours"
+        android:id="@+id/pickerHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/mondayButton"
@@ -120,17 +120,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/mondayButton"
-        android:layout_alignBaseline="@id/spinnerHours"
+        android:layout_alignBaseline="@id/pickerHours"
         android:layout_marginVertical="5dp"
-        android:layout_toEndOf="@id/spinnerHours"
+        android:layout_toEndOf="@id/pickerHours"
         android:text=":" />
 
     <Spinner
-        android:id="@+id/spinnerMinutes"
+        android:id="@+id/pickerMinutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/mondayButton"
-        android:layout_alignBaseline="@id/spinnerHours"
+        android:layout_alignBaseline="@id/pickerHours"
         android:layout_marginVertical="5dp"
         android:layout_toEndOf="@id/textView2" />
 </RelativeLayout>

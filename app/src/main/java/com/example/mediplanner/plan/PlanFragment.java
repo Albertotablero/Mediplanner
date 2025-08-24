@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
+import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
 import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.utils.HoursListViewAdapter;
@@ -33,7 +35,9 @@ import com.example.mediplanner.utils.SpinnerAdapter;
 import com.example.mediplanner.utils.TreatmentForm;
 
 import org.joda.time.DateTime;
+import org.joda.time.Hours;
 import org.joda.time.LocalDate;
+import org.joda.time.Minutes;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -145,7 +149,12 @@ public class PlanFragment extends DialogFragment {
                         ListView dailyHoursView = new ListView(getContext());
 
                         //Setting up adapter for list view
-                        HoursListViewAdapter hoursAdapter = new HoursListViewAdapter(getContext(), plan.getDailyHours());
+                        if (plan.getPlanHours().isEmpty()) {
+                            DateTime now = DateTime.now();
+                            plan.getPlanHours().add(new PlanHours(now.getHourOfDay(), now.getMinuteOfHour()));
+                        }
+
+                        HoursListViewAdapter hoursAdapter = new HoursListViewAdapter(getContext(), plan.getPlanHours());
                         dailyHoursView.setAdapter(hoursAdapter);
 
                         //for adding another hour to the listview
@@ -183,19 +192,46 @@ public class PlanFragment extends DialogFragment {
                         setUpWeekButtons(weeklyView, R.id.mondayButton, 6, weeksActive);
 
                         //Managing the hour for the treatment
-                        ArrayList<String> hour = new ArrayList<>();
-                        ArrayList<String> minute = new ArrayList<>();
-                        HoursListViewAdapter.fillHoursAndMinutes(hour, minute);
 
-                        Spinner hoursSpinner = weeklyView.findViewById(R.id.spinnerHours);
-                        String[] hoursArray = new String[hour.size()];
-                        SpinnerAdapter hourSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(hoursArray), false);
-                        hoursSpinner.setAdapter(hourSpinAdpt);
+                        //Setting up pickers with hours and minutes
+                        NumberPicker hoursPicker = weeklyView.findViewById(R.id.pickerHours);
+                        hoursPicker.setMinValue(00);
+                        hoursPicker.setMaxValue(23);
+                        hoursPicker.setFormatter(new NumberPicker.Formatter() {
+                            @Override
+                            public String format(int value) {
+                                return String.format(Locale.getDefault(), "%02d", value);
+                            }
+                        });
+                        hoursPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                                plan.getPlanHours().get(0).hours = Hours.hours(view.getValue());
+                            }
+                        });
 
-                        Spinner minutesSpinner = weeklyView.findViewById(R.id.spinnerMinutes);
-                        String[] minutesArray = new String[hour.size()];
-                        SpinnerAdapter minutesSpinAdpt = new SpinnerAdapter(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, hour.toArray(minutesArray), false);
-                        minutesSpinner.setAdapter(minutesSpinAdpt);
+                        NumberPicker minutesPicker = weeklyView.findViewById(R.id.pickerMinutes);
+                        minutesPicker.setMinValue(00);
+                        minutesPicker.setMaxValue(59);
+
+                        minutesPicker.setFormatter(new NumberPicker.Formatter() {
+                            @Override
+                            public String format(int value) {
+                                return String.format(Locale.getDefault(), "%02d", value);
+                            }
+                        });
+                        minutesPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChange(NumberPicker view, int scrollState) {
+                                plan.getPlanHours().get(0).minutes = Minutes.minutes(view.getValue());
+                            }
+                        });
+
+                        plan.getPlanHours().clear();
+                        DateTime now = DateTime.now();
+                        plan.getPlanHours().add(new PlanHours(now.getHourOfDay(), now.getMinuteOfHour()));
+                        hoursPicker.setValue(plan.getPlanHours().get(0).hours.getValue(0));
+                        minutesPicker.setValue(plan.getPlanHours().get(0).minutes.getValue(0));
 
                         child = weeklyView;
                         break;
@@ -237,7 +273,7 @@ public class PlanFragment extends DialogFragment {
             }
 
             private void addHours(HoursListViewAdapter hoursAdapter) {
-                hoursAdapter.add(DateTime.now().getHourOfDay() + ":" + DateTime.now().getMinuteOfHour());
+                hoursAdapter.add(new PlanHours(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour()));
             }
 
 

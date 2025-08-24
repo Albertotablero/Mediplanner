@@ -1,6 +1,7 @@
 package com.example.mediplanner.calendar;
 
 import com.example.mediplanner.plan.Plan;
+import com.example.mediplanner.plan.TreatmentUsage;
 import com.example.mediplanner.plan.TreatmentUse;
 
 import org.joda.time.Hours;
@@ -12,7 +13,7 @@ public class Day {
     private int dayOfMonth;
     private int dayOfWeek;
 
-    private ArrayList<Treatmentusage> treatmentusages;
+    private ArrayList<TreatmentUsage> treatmentusages;
 
 
     public Day(int day, int dayOfWeek) {
@@ -37,14 +38,9 @@ public class Day {
         this.dayOfWeek = dayOfWeek;
     }
 
-    private class Treatmentusage {
-        public Plan treatment;
-        public TreatmentUse usage;
-        public Hours hour;
 
-        public Treatmentusage(TreatmentUse usage, Plan treatmentPlan, Hours hour) {
-            this.usage = usage;
-            this.treatment = treatmentPlan;
-        }
+    public ArrayList<TreatmentUsage> getTreatmentusages() {
+        return treatmentusages;
     }
+
 }

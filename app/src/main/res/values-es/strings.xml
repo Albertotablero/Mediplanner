@@ -83,5 +83,7 @@
     <string name="removeTreatmentWarningTitle">Eliminar Plan de Tratamiento</string>
     <string name="removeTreatmentPrompt">¿Seguro que desea eliminar este Plan de Tratamiento?</string>
     <string name="december">Diciembre</string>
+    <string name="complete">Completar</string>
+    <string name="ignore">Ignorar</string>
 
 </resources>

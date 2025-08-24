@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/very_light_grey">
+
+    <TextView
+        android:id="@+id/daytreatmentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:minLines="1"
+        android:text="PH"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dayTreatmentHout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/daytreatmentName"
+        android:layout_margin="5dp"
+        android:layout_toLeftOf="@id/moreTreatmentsButtons"
+        android:text="8:00"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/dayTreatmentQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_toStartOf="@id/dayTreatmentQuantityMetric"
+        android:minLines="1"
+        android:text="PH"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dayTreatmentQuantityMetric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:minLines="1"
+        android:text="PH"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/ignoreButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dayTreatmentHout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:background="@color/light_purple"
+        android:padding="5dp"
+        android:text="@string/ignore"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/completeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dayTreatmentHout"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@id/ignoreButton"
+        android:background="@color/light_purple"
+        android:padding="5dp"
+        android:text="@string/complete"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/moreTreatmentsButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/dayTreatmentHout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_margin="5dp"
+        android:text="@string/more"
+        android:textColor="@color/light_purple" />
+</RelativeLayout>
