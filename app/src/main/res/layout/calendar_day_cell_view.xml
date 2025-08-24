@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.example.mediplanner.calendar.DayFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/calendar_selected_day_highlight">
+
+    <TextView
+        android:id="@+id/dayTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginVertical="1dp"
+        android:background="@color/very_light_grey"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+</com.example.mediplanner.calendar.DayFrameLayout>

@@ -1,6 +1,7 @@
 package com.example.mediplanner;
 
 
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mediplanner.calendar.CalendarTabFragment;
+import com.example.mediplanner.calendar.Month;
 import com.example.mediplanner.databinding.ActivityMainBinding;
 import com.example.mediplanner.treatments.TreatmentsTabFragment;
 import com.example.mediplanner.utils.CloseListener;
@@ -27,9 +29,11 @@ import com.google.android.material.tabs.TabLayout;
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
+    // view binding
     private ActivityMainBinding mainActivityBinding;
 
     public FragmentManager fragmentManager;
@@ -38,32 +42,19 @@ public class MainActivity extends AppCompatActivity {
     private TabStageAdapter tabStageAdapter;
     private ViewPager2 viewPager;
 
+    // Tab fragments
     private static CalendarTabFragment calendarTabFragment;
     private static TreatmentsTabFragment treatmentsTabFragment;
 
-    public static CalendarTabFragment getCalendarTabFragment() {
-        return calendarTabFragment;
-    }
-
-    public static void setCalendarTabFragment(CalendarTabFragment calendarTabFragment) {
-        MainActivity.calendarTabFragment = calendarTabFragment;
-    }
-
-    public static TreatmentsTabFragment getTreatmentsTabFragment() {
-        return treatmentsTabFragment;
-    }
-
-    public static void setTreatmentsTabFragment(TreatmentsTabFragment treatmentsTabFragment) {
-        MainActivity.treatmentsTabFragment = treatmentsTabFragment;
-    }
-
+    // Plan creation fragment
     private PlanFragment planFragment;
 
+    //List of all treatment plans created
     private static ArrayList<Plan> treatmentPlanList;
 
-    public static ArrayList<Plan> getTreatmentPlanList() {
-        return treatmentPlanList;
-    }
+    // List of all months with data stored
+    private static ArrayList<Month> savedMonths = new ArrayList<>();
+    private static HashMap<String, Month> storedMonths = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,5 +143,33 @@ public class MainActivity extends AppCompatActivity {
         /*
          *  TODO Load list from save file
          * */
+    }
+
+    public static CalendarTabFragment getCalendarTabFragment() {
+        return calendarTabFragment;
+    }
+
+    public static void setCalendarTabFragment(CalendarTabFragment calendarTabFragment) {
+        MainActivity.calendarTabFragment = calendarTabFragment;
+    }
+
+    public static TreatmentsTabFragment getTreatmentsTabFragment() {
+        return treatmentsTabFragment;
+    }
+
+    public static void setTreatmentsTabFragment(TreatmentsTabFragment treatmentsTabFragment) {
+        MainActivity.treatmentsTabFragment = treatmentsTabFragment;
+    }
+
+    public static ArrayList<Plan> getTreatmentPlanList() {
+        return treatmentPlanList;
+    }
+
+    public static ArrayList<Month> getSavedMonths() {
+        return savedMonths;
+    }
+
+    public static HashMap<String, Month> getStoredMonths() {
+        return storedMonths;
     }
 }

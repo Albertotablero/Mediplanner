@@ -1,5 +1,8 @@
 package com.example.mediplanner.calendar;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,11 +12,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.FragmentCalendarTabBinding;
-import com.example.mediplanner.databinding.FragmentTreatmentsTabBinding;
 
 import org.joda.time.LocalDate;
 
@@ -22,8 +28,12 @@ import java.util.Locale;
 
 public class CalendarTabFragment extends Fragment {
 
-    FragmentCalendarTabBinding binding;
-    private LocalDate selectedDate;
+    private FragmentCalendarTabBinding binding;
+
+    private Month selectedMonth;
+    private int weekOfSelectedDay = 0;
+    private DayFrameLayout selectedDayCell;
+    private Day selectedDay;
 
     public CalendarTabFragment() {
     }
@@ -31,16 +41,85 @@ public class CalendarTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedDate = LocalDate.now();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        LocalDate initDate = LocalDate.now();
+        // Month to display above calendar (Represents selected month, current by default)
+        binding.monthDislpayed.setText(getMonthName(initDate.getMonthOfYear()));
+        binding.yeardisplayed.setText(String.format(Locale.getDefault(), "%4d", initDate.getYear()));
 
+        // TODO check if Month already exist before doing this
+        selectedMonth = getMonth(initDate.getMonthOfYear(), initDate.getYear());
 
-        binding.monthDislpayed.setText(getMonthName(selectedDate.getMonthOfYear()));
-        binding.yeardisplayed.setText(String.format(Locale.getDefault(), "%4d", selectedDate.getYear()));
+        // Populating the Calendar with the required rows and cells
+        for (int i = 0; i < selectedMonth.getWeeks().size(); i++) {
+            TableRow row = (TableRow) binding.calendarTL.getChildAt(i + 1);
+            Week week = selectedMonth.getWeeks().get(i);
 
+            int j = 0;
+            int y = 0;
+            if (i == 0 && week.getDaysOfWeek().get(0).getDayOfWeek() != 1) {
+
+                for (; j < week.getDaysOfWeek().get(0).getDayOfWeek(); j++) {
+                    generateCell(row, j, null, "-");
+                }
+            }
+            for (; j < 7; j++) {
+                String dayOfMonth = "-";
+                Day day = null;
+                try {
+                    day = week.getDaysOfWeek().get(y++);
+                    dayOfMonth = String.format(Locale.getDefault(), "%2d", day.getDayOfMonth());
+                } catch (IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                generateCell(row, j, day, dayOfMonth);
+            }
+            row.setVisibility(View.VISIBLE);
+
+        }
+        // Load plan data, good luck Alberto
+        
+    }
+
+    private Month getMonth(int monthNumber, int year) {
+        Month month;
+        String monthTag = String.format(Locale.getDefault(), "%1$2d/%2$4d", monthNumber, year);
+
+        if (MainActivity.getStoredMonths().containsKey(monthTag)) {
+            month = MainActivity.getStoredMonths().get(monthTag);
+        } else {
+            month = new Month(monthNumber, year);
+            MainActivity.getStoredMonths().put(monthTag, month);
+        }
+
+        return month;
+    }
+
+    private void generateCell(TableRow row, int j, Day day, String dayOfMonth) {
+        // Inflating the cells for each day in the month
+        DayFrameLayout view = (DayFrameLayout) getLayoutInflater().inflate(R.layout.calendar_day_cell_view, null, false);
+        TextView dayText = view.findViewById(R.id.dayTextView);
+        view.setCellDay(day);
+        dayText.setText(dayOfMonth);
+
+        view.setSelected(false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedDayCell != null) selectedDayCell.setSelected(false);
+                selectedDayCell = (DayFrameLayout) v;
+                selectedDayCell.setSelected(true);
+                selectedDay = selectedDayCell.getCellDay();
+            }
+        });
+        row.addView(view, j);
+    }
+
+    public void onRowClicked(int i) {
+        weekOfSelectedDay = i;
     }
 
     private String getMonthName(int monthNumber) {
@@ -76,8 +155,7 @@ public class CalendarTabFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCalendarTabBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }

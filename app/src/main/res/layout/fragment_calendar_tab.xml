@@ -14,8 +14,7 @@
         android:layout_below="@id/calendarTL"
         android:layout_marginHorizontal="2dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="64dp"
-        android:background="@color/light_purple" />
+        android:layout_marginBottom="64dp" />
 
     <LinearLayout
         android:id="@+id/yearAndMonthView"
@@ -54,11 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/yearAndMonthView"
         android:layout_alignParentStart="true"
-        android:layout_marginHorizontal="2dp">
+        android:layout_marginHorizontal="2dp"
+        android:stretchColumns="*">
 
         <TableRow
             android:id="@+id/headerRow"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="#2A2A2A">
 
@@ -66,6 +66,7 @@
                 android:id="@+id/mondayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -77,6 +78,7 @@
                 android:id="@+id/tuesdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="1"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -88,6 +90,7 @@
                 android:id="@+id/wednesdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="2"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -99,6 +102,7 @@
                 android:id="@+id/thursdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="3"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -110,6 +114,7 @@
                 android:id="@+id/fridayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="4"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -121,6 +126,7 @@
                 android:id="@+id/saturdayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="5"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -132,6 +138,7 @@
                 android:id="@+id/sundayTextV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_column="6"
                 android:layout_marginHorizontal="1dp"
                 android:layout_marginVertical="1dp"
                 android:layout_weight="1"
@@ -143,50 +150,44 @@
 
         <TableRow
             android:id="@+id/calendarRow1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
         <TableRow
             android:id="@+id/calendarRow2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
         <TableRow
             android:id="@+id/calendarRow3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
         <TableRow
             android:id="@+id/calendarRow4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
         <TableRow
             android:id="@+id/calendarRow5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
         <TableRow
             android:id="@+id/calendarRow6"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="2dp"
-            android:background="#2A2A2A"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:visibility="invisible" />
 
     </TableLayout>

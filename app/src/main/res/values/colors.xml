@@ -7,4 +7,9 @@
     <color name="weekButtonOff">#979999</color>
     <color name="weekButtonOn">#8AD7B8</color>
     <color name="selectionBackground">#9F98B3</color>
+    <color name="selectionDayHighlight">#08FDFE</color>
+    <color name="backgroundCompletedDay">#C4FEBF</color>
+    <color name="backgroundIncompleteDay">#EEE3AF</color>
+    <color name="backgroundMissedDay">#FE9597</color>
+    <color name="very_light_grey">#F4F3F3</color>
 </resources>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/mondayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:background="#F6F6F6"
+        android:text="@string/monday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/tuesdayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/mondayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/tuesday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/wednesdayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/tuesdayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/wednesday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/thursdayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/wednesdayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/thursday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/fridayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/thursdayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/friday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/saturdayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/fridayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/saturday"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/sundayTextV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/mondayTextV"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_toEndOf="@id/saturdayTextV"
+        android:background="#F6F6F6"
+        android:text="@string/sunday"
+        android:textAlignment="center" />
+
+</RelativeLayout>
