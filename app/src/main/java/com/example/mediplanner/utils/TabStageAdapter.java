@@ -31,7 +31,7 @@ public class TabStageAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return MediPlannerConstants.TAB_COUNT;
+        return MediPConstants.TAB_COUNT;
     }
 
 }

@@ -105,5 +105,6 @@
     //Daily treatments list
     <string name="complete">Complete</string>
     <string name="ignore">Ignore</string>
+    <string name="startingHour">First take</string>
 
 </resources>

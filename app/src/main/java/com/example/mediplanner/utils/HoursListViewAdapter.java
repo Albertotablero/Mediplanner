@@ -3,27 +3,23 @@ package com.example.mediplanner.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.icu.number.IntegerWidth;
-import android.icu.number.LocalizedNumberFormatter;
-import android.icu.number.NumberFormatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.mediplanner.R;
+import com.example.mediplanner.date.HourPickerDialogFragment;
 import com.example.mediplanner.date.PlanHours;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
-import org.joda.time.LocalDate;
 import org.joda.time.Minutes;
 
 import java.util.ArrayList;
@@ -33,14 +29,15 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
     private ArrayList<PlanHours> specifiedHours;
     private Hours hour;
     private Minutes minutes;
+    private HourPickerDialogFragment hourPickerDialogFragment;
+    private FragmentManager fragmentManager;
 
-    public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<PlanHours> objects) {
+    public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<PlanHours> objects, FragmentManager fManager) {
         super(context, 0, objects);
-
+        fragmentManager = fManager;
         specifiedHours = objects;
         hour = Hours.hours(DateTime.now().getHourOfDay());
         minutes = Minutes.minutes(DateTime.now().getMinuteOfHour());
-
     }
 
     @NonNull
@@ -50,41 +47,40 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hours_list_item, parent, false);
 
+        PlanHours item = getItem(position);
+
         //Setting up pickers with hours and minutes
-        NumberPicker hoursPicker = convertView.findViewById(R.id.pickerHours);
-        hoursPicker.setMinValue(00);
-        hoursPicker.setMaxValue(23);
-        hoursPicker.setFormatter(new NumberPicker.Formatter() {
-            @Override
-            public String format(int value) {
-                return String.format(Locale.getDefault(), "%02d", value);
-            }
-        });
-        hoursPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker view, int scrollState) {
-                hour = Hours.hours(view.getValue());
-            }
-        });
+        String f = "%02d";
+        Locale l = Locale.getDefault();
 
-        NumberPicker minutesPicker = convertView.findViewById(R.id.pickerMinutes);
-        minutesPicker.setMinValue(00);
-        minutesPicker.setMaxValue(59);
+        TextView hour = convertView.findViewById(R.id.pickedHour);
+        hour.setText(String.format(l, f, item.hours.getHours()));
 
-        minutesPicker.setFormatter(new NumberPicker.Formatter() {
+        TextView minutes = convertView.findViewById(R.id.pickedMinute);
+        minutes.setText(String.format(l, f, item.minutes.getMinutes()));
+
+        LinearLayout hoursView = convertView.findViewById(R.id.hoursLayout);
+
+        hoursView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public String format(int value) {
-                return String.format(Locale.getDefault(), "%02d", value);
+            public void onClick(View v) {
+
+                hourPickerDialogFragment = new HourPickerDialogFragment(item.hours.getHours(), item.minutes.getMinutes(), new CloseListener() {
+                    @Override
+                    public void OnClose(boolean isCanceled) {
+                        item.hours = Hours.hours(hourPickerDialogFragment.getBinding().hoursPicker.getValue());
+                        item.minutes = Minutes.minutes(hourPickerDialogFragment.getBinding().minutesPicker.getValue());
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void OnClose(int month, int year) {
+
+                    }
+                });
+                hourPickerDialogFragment.show(fragmentManager, "meh");
             }
         });
-        minutesPicker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-            @Override
-            public void onScrollStateChange(NumberPicker view, int scrollState) {
-                minutes = Minutes.minutes(view.getValue());
-            }
-        });
-        hoursPicker.setValue(hour.getValue(0));
-        minutesPicker.setValue(minutes.getValue(0));
 
         // Manage button for removing an hour
         TextView removeItem = convertView.findViewById((R.id.removeHourButon));
@@ -99,6 +95,7 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
 
             public void onClick(DialogInterface dialog, int whichButton) {
                 remove(getItem(position));
+                notifyDataSetChanged();
             }
         }).setNegativeButton(android.R.string.no, null).show();
     }

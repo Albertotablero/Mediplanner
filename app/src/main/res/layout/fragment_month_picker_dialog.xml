@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/monthPickerRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    tools:context="date.MonthPickerDialogFragment">
+
+    <NumberPicker
+        android:id="@+id/monthPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:layout_weight="1"
+        android:baselineAligned="true"
+        android:descendantFocusability="blocksDescendants" />
+
+    <NumberPicker
+        android:id="@+id/yearPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_weight="1"
+        android:baselineAligned="true"
+        android:descendantFocusability="blocksDescendants" />
+</LinearLayout>

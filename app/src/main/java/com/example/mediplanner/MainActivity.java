@@ -23,13 +23,18 @@ import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.PlanFragment;
 import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
 import com.example.mediplanner.utils.FrequencyMetric;
+import com.example.mediplanner.utils.MediPConstants;
 import com.example.mediplanner.utils.TabStageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import org.joda.time.LocalDate;
 
+import java.time.chrono.IsoChronology;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     // view binding
@@ -133,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+                    @Override
+                    public void OnClose(int month, int year) {
+
+                    }
+
                 });
                 planFragment.setNew(true);
                 planFragment.setCancelable(false);
@@ -145,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
          * */
     }
 
-    public static void addMonth(Month month, String monthTag) {
+    public static Month addMonth(Month month, String monthTag) {
         storedMonths.put(monthTag, month);
 
         for (Plan p :
@@ -156,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
+        return month;
     }
 
     public static CalendarTabFragment getCalendarTabFragment() {

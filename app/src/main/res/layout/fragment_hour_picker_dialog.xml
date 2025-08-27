@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hoursPickersLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="20dp"
+    android:gravity="center"
+    tools:context=".date.HourPickerDialogFragment">
+
+    <NumberPicker
+        android:id="@+id/hoursPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginHorizontal="2dp"
+        android:baselineAligned="true" />
+
+    <TextView
+        android:id="@+id/separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
+        android:layout_centerVertical="true"
+        android:layout_marginHorizontal="2dp"
+        android:layout_toRightOf="@id/hoursPicker"
+        android:text=":"
+        android:textSize="20sp" />
+
+    <NumberPicker
+        android:id="@+id/minutesPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_toEndOf="@id/separator"
+        android:baselineAligned="true" />
+</RelativeLayout>

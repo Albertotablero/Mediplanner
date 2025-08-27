@@ -85,5 +85,6 @@
     <string name="december">Diciembre</string>
     <string name="complete">Completar</string>
     <string name="ignore">Ignorar</string>
+    <string name="startingHour">First take</string>
 
 </resources>

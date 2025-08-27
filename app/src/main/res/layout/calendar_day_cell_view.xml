@@ -16,5 +16,6 @@
         android:paddingTop="18dp"
         android:paddingBottom="18dp"
         android:textAlignment="center"
+        android:textColor="@color/day_text_active_month_color"
         android:textSize="16sp" />
 </com.example.mediplanner.calendar.DayFrameLayout>
