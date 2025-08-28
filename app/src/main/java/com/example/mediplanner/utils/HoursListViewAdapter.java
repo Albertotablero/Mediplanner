@@ -86,6 +86,7 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
         TextView removeItem = convertView.findViewById((R.id.removeHourButon));
         removeItem.setOnClickListener(e -> removeHour(e, position));
 
+
         return convertView;
     }
 

@@ -15,7 +15,7 @@ public class Plan {
     private FrequencyMetric frequencyMetric; // How to measure frequency
     private LocalDate startDate; // Start date of treatment plan
     private boolean isPermanent; // Whether is permanent as opposed to having a set duration
-    //private float duration; // Duration of the treatment plan
+    private LocalDate endDate;
     private boolean isActive; // Whether the treatment plan is active or not
     private TreatmentForm form; // Form of the treatment (Medium of consumption)
     private float quantity;
@@ -28,12 +28,16 @@ public class Plan {
 
 
     public Plan(String name, String details, boolean isActive, int freqMetric, int form, float quantity, String quantityMetric,
-                LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric durationMetric) {
+                LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric frequencyMetric) {
         initialize();
         setName(name);
         setDetails(details);
         setActive(isActive);
-        setFrequencyMetric(freqMetric);
+        if (freqMetric != -1) {
+            setFrequencyMetric(freqMetric);
+        } else {
+            setFrequencyMetric(frequencyMetric);
+        }
         setQuantity(quantity);
         setQuantityMetric(quantityMetric);
         setForm(form);
@@ -43,7 +47,6 @@ public class Plan {
 
     public Plan() {
         initialize();
-
     }
 
     private void initialize() {
@@ -82,6 +85,10 @@ public class Plan {
 
     public FrequencyMetric getFrequencyMetric() {
         return frequencyMetric;
+    }
+
+    public void setFrequencyMetric(FrequencyMetric frequencyMetric) {
+        this.frequencyMetric = frequencyMetric;
     }
 
     public void setFrequencyMetric(int frequencyMetric) {
@@ -127,7 +134,6 @@ public class Plan {
     public void setPermanent(boolean permanent) {
         isPermanent = permanent;
     }
-
 
     public TreatmentForm getForm() {
         return form;
@@ -195,4 +201,13 @@ public class Plan {
     public void setQuantityMetric(String quantityMetric) {
         this.quantityMetric = quantityMetric;
     }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
 }

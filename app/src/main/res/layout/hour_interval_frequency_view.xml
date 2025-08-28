@@ -14,6 +14,15 @@
         android:maxEms="3"
         android:maxLines="1" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/hourIntervalEditText"
+        android:layout_marginHorizontal="5dp"
+        android:layout_toEndOf="@id/hourIntervalEditText"
+        android:text="@string/hours" />
+
     <LinearLayout
         android:id="@+id/hoursLayout"
         android:layout_width="wrap_content"
@@ -26,7 +35,10 @@
             android:id="@+id/startTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="2dp"
+            android:ems="4"
+            android:maxLines="3"
+            android:minLines="1"
             android:text="@string/startingHour" />
 
         <NumberPicker
@@ -34,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginHorizontal="2dp"
+            android:layout_marginEnd="2dp"
             android:baselineAligned="true" />
 
         <TextView
@@ -58,7 +70,7 @@
 
     <com.example.mediplanner.utils.NoScrollListView
         android:id="@+id/hoursInADay"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginHorizontal="10dp"

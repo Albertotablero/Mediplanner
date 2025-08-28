@@ -17,6 +17,7 @@ import com.example.mediplanner.calendar.CalendarTabFragment;
 import com.example.mediplanner.calendar.DayTreatmentPlansFiller;
 import com.example.mediplanner.calendar.Month;
 import com.example.mediplanner.databinding.ActivityMainBinding;
+import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.treatments.TreatmentsTabFragment;
 import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.plan.Plan;
@@ -73,9 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
         treatmentPlanList = new ArrayList<>();
         // TODO temp, remove after testing
-        treatmentPlanList.add(new Plan("Concerta 30g", "Tomar por la mañana con el desayuno.", true, 1, 1, 1, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
-        treatmentPlanList.add(new Plan("Loratadina", "Tomar por la noche.", true, 1, 1, 1, "Pill", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
-        treatmentPlanList.add(new Plan("meh", "meh", true, 0, 1, 4, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        treatmentPlanList.add(new Plan("Concerta 30g", "Tomar por la mañana con el desayuno.", true, -1, 1, 1, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
+        treatmentPlanList.add(new Plan("Loratadina", "Tomar por la noche.", true, -1, 1, 1, "Pill", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
+        Plan x = new Plan("Prueba h diarias", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY);
+        x.getPlanHours().add(new PlanHours(8, 0));
+        x.getPlanHours().add(new PlanHours(16, 0));
+        x.getPlanHours().add(new PlanHours(00, 0));
+        Plan y = new Plan("Socorro", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY);
+        y.getPlanHours().add(new PlanHours(8, 0));
+        y.getPlanHours().add(new PlanHours(16, 0));
+        y.getPlanHours().add(new PlanHours(00, 0));
+        y.setPermanent(false);
+        y.setEndDate(new LocalDate(2025, 8, 30));
+        treatmentPlanList.add(x);
+        treatmentPlanList.add(y);
         treatmentPlanList.add(new Plan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
 
         //Setting up fragments
@@ -160,11 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
         for (Plan p :
                 treatmentPlanList) {
-            switch (p.getFrequencyMetric()) {
-                case DAILY:
-                    DayTreatmentPlansFiller.fillDailyPlan(p, month);
-                    break;
-            }
+            if (p.isActive())
+                switch (p.getFrequencyMetric()) {
+                    case DAILY:
+                        DayTreatmentPlansFiller.fillDailyPlan(p, month);
+                        break;
+                }
         }
         return month;
     }

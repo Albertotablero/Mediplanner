@@ -38,10 +38,10 @@ public class SpecificDateViewAdapter extends ArrayAdapter<String> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.specific_dates_frequency_item, parent, false);
 
-        EditText date = convertView.findViewById(R.id.startDate);
+        EditText date = convertView.findViewById(R.id.startDateInput);
         date.setText(specifiedDates.get(position));
 
-        ImageButton calendarDialogButton = convertView.findViewById(R.id.calendarDialogButton);
+        ImageButton calendarDialogButton = convertView.findViewById(R.id.startDateCalendarDialogB);
         calendarDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

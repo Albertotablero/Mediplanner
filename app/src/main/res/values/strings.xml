@@ -99,12 +99,15 @@
     <string name="fillOutName">Please introduce a name with at least 3 characters</string>
     <string name="selectFreq">Please select a frequency type</string>
     <string name="selectForm">Please select a Form type</string>
-
-    //Plan Creation End
-
     //Daily treatments list
     <string name="complete">Complete</string>
     <string name="ignore">Ignore</string>
     <string name="startingHour">First take</string>
+    <string name="hours">hours</string>
+    <string name="permanent">Permanent</string>
+    <string name="endDate">End Date</string>
+    //Plan Creation End
+
+
 
 </resources>

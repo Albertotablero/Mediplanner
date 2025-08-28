@@ -3,39 +3,50 @@ package com.example.mediplanner.calendar;
 import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.TreatmentUsage;
+import com.example.mediplanner.plan.TreatmentUse;
 
-import org.joda.time.Hours;
 import org.joda.time.LocalDate;
 
+import java.util.Locale;
+
 public class DayTreatmentPlansFiller {
+    private static final String TREATMENT_PLAN_USAGE_TAG_FORMAT = "%1$2d/%2$2d/%3$4d/%4$d/%5$s/%6$02d:%7$02d";
 
     // Fill stored months with plans with daily frequency
     public static void fillDailyPlan(Plan p, Month month) {
         // If there ar no specified hours just add them once
         if (p.getPlanHours().isEmpty()) {
-            for (Week w : month.getWeeks()) {
-                for (Day d : w.getDaysOfWeek()) {
-                    if (checkStartDate(p, d, month))
-                        d.getTreatmentusages().add(new TreatmentUsage(p));
-                }
+            for (Day day : month.getDays()) {
+                if (checkStartDate(p, day, month))
+                    day.getTreatmentUsages().putIfAbsent(tagFor(day.getDayOfMonth(), month.getMonthOfYear(), month.getYear(), p.getName(), 0, 0), new TreatmentUsage(p, TreatmentUse.UNKOWWN));
             }
+
         } else { // Otherways they get added for every hour specified
-            for (PlanHours h :
-                    p.getPlanHours()) {
-                for (Week w : month.getWeeks()) {
-                    for (Day d : w.getDaysOfWeek()) {
-                        d.getTreatmentusages().add(new TreatmentUsage(p, h.hours, h.minutes));
+            for (Day day : month.getDays()) {
+                if (checkStartDate(p, day, month)) {
+                    for (PlanHours hour :
+                            p.getPlanHours()) {
+                        day.getTreatmentUsages().putIfAbsent(
+                                tagFor(day.getDayOfMonth(), month.getMonthOfYear(), month.getYear(), p.getName(), hour.hours.getHours(), hour.minutes.getMinutes()),
+                                new TreatmentUsage(p, TreatmentUse.UNKOWWN, hour));
                     }
                 }
             }
         }
-
     }
 
-    private static boolean checkStartDate(Plan p, Day day, Month monthOfYear) {
-
-        LocalDate date = LocalDate.parse(monthOfYear.getYear() + "-" + monthOfYear.getMonthOfYear() + "-" + day.getDayOfMonth());
-
-        return date.isAfter(p.getStartDate()) || date.isEqual(p.getStartDate());
+    /*
+     * The date needs to be >= than StarDate AND <= than EndDate if it isn't permanent
+     *
+     * */
+    private static boolean checkStartDate(Plan plan, Day day, Month monthOfYear) {
+        LocalDate date = new LocalDate(monthOfYear.getYear(), monthOfYear.getMonthOfYear(), day.getDayOfMonth());
+        return (date.isAfter(plan.getStartDate()) || date.isEqual(plan.getStartDate())) &&
+                (plan.isPermanent() || (date.isBefore(plan.getEndDate()) || date.isEqual(plan.getEndDate())));
     }
+
+    private static String tagFor(int dayOfMonth, int monthOfYear, int year, String name, int hour, int minute) {
+        return String.format(Locale.getDefault(), TREATMENT_PLAN_USAGE_TAG_FORMAT, dayOfMonth, dayOfMonth, monthOfYear, year, name, hour, minute);
+    }
+
 }

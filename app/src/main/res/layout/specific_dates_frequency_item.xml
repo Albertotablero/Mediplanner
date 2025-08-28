@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/startDate"
+        android:id="@+id/startDateInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
@@ -13,10 +13,10 @@
         android:inputType="date" />
 
     <ImageButton
-        android:id="@+id/calendarDialogButton"
+        android:id="@+id/startDateCalendarDialogB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/startDate"
+        android:layout_toEndOf="@id/startDateInput"
         android:layout_weight="0"
         app:srcCompat="@drawable/ic_calendar_button" />
 
@@ -25,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_alignBaseline="@id/startDate"
-        android:layout_toEndOf="@id/calendarDialogButton"
+        android:layout_alignBaseline="@id/startDateInput"
+        android:layout_toEndOf="@id/startDateCalendarDialogB"
         android:background="@android:color/transparent"
         android:minWidth="25dip"
         android:text="X"

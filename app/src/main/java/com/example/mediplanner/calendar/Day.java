@@ -1,25 +1,22 @@
 package com.example.mediplanner.calendar;
 
-import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.TreatmentUsage;
-import com.example.mediplanner.plan.TreatmentUse;
 
-import org.joda.time.Hours;
-
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Day {
 
     private int dayOfMonth;
     private int dayOfWeek;
 
-    private ArrayList<TreatmentUsage> treatmentusages;
+    private Map<String, TreatmentUsage> treatmentUsages;
 
 
     public Day(int day, int dayOfWeek) {
         setDayOfMonth(day);
         setDayOfWeek(dayOfWeek);
-        treatmentusages = new ArrayList<>();
+        treatmentUsages = new HashMap<>();
     }
 
     public int getDayOfMonth() {
@@ -39,8 +36,7 @@ public class Day {
     }
 
 
-    public ArrayList<TreatmentUsage> getTreatmentusages() {
-        return treatmentusages;
+    public Map<String, TreatmentUsage> getTreatmentUsages() {
+        return treatmentUsages;
     }
-
 }

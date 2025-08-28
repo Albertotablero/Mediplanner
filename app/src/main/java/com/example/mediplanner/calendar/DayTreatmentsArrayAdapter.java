@@ -12,16 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mediplanner.R;
+import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.TreatmentUsage;
 
+import org.joda.time.Hours;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DayTreatmentsArrayAdapter extends ArrayAdapter<TreatmentUsage> {
 
     private Day day;
     private ArrayList<TreatmentUsage> treatments;
+    private PlanHours hour;
 
     public DayTreatmentsArrayAdapter(@NonNull Context context, int resource, @NonNull ArrayList<TreatmentUsage> objects, Day day) {
         super(context, 0, objects);
@@ -34,14 +39,18 @@ public class DayTreatmentsArrayAdapter extends ArrayAdapter<TreatmentUsage> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null)
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.selected_day_treatments_view, parent, false);
-
+        convertView.setBackgroundColor(parent.getResources().getColor(position % 2 == 0 ? R.color.very_light_grey : R.color.white, parent.getContext().getTheme()));
         Plan treatment = treatments.get(position).treatment;
+        PlanHours hour = treatments.get(position).hour;
 
         TextView name = convertView.findViewById(R.id.daytreatmentName);
         name.setText(treatment.getName());
 
-        TextView details = convertView.findViewById(R.id.dayTreatmentHout);
-        details.setText(treatment.getDetails());
+        TextView time = convertView.findViewById(R.id.dayTreatmentHout);
+
+        String text = hour != null ? String.format(Locale.getDefault(), "%1$02d:%2$02d", hour.hours.getHours(), hour.minutes.getMinutes()) : "";
+        time.setText(text);
+
 
         TextView quanitty = convertView.findViewById(R.id.dayTreatmentQuantity);
         DecimalFormat decimalFormat = new DecimalFormat("0.##");

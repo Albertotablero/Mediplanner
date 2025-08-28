@@ -1,248 +1,368 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container_view"
+    android:id="@+id/planFragmentRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="10dp"
-    android:fillViewport="true"
-    android:verticalScrollbarPosition="defaultPosition">
+    android:layout_marginBottom="10dp">
 
-
-    <RelativeLayout
-        android:id="@+id/fakeRoot"
+    <FrameLayout
+        android:id="@+id/headerFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="5dp">
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="false"
-            android:layout_marginHorizontal="5dp"
-            android:layout_toEndOf="@id/StartDateTextView"
-            android:orientation="vertical"
-            tools:visibility="invisible" />
+        android:background="@color/selectionBackgroundBright"
+        android:paddingVertical="10dp">
 
         <TextView
-            android:id="@+id/nameTextView"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/treatmentPlanNameTextInput"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:clickable="false"
-            android:text="@string/name"
-            android:textAlignment="textEnd" />
+            android:layout_marginStart="12dp"
+            android:text="New Plan"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </FrameLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/treatmentPlanNameTextInput"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerFrame"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:verticalScrollbarPosition="right">
+
+        <RelativeLayout
+            android:id="@+id/fakeRoot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/guideline">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameTextInput"
-                android:layout_width="match_parent"
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="10dp"
-                android:hint="@string/treatment_name_prompt"
-                android:maxLines="1"
-                android:textSize="12sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="false"
+                android:layout_marginHorizontal="5dp"
+                android:layout_toEndOf="@id/StartDateTextView"
+                android:orientation="vertical"
+                tools:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/detailsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/nameTextView"
-            android:layout_alignBaseline="@id/detailsTextLayout"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:clickable="false"
-            android:text="@string/treatment_details"
-            android:textAlignment="textEnd" />
+            <TextView
+                android:id="@+id/nameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/treatmentPlanNameTextInput"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/name"
+                android:textAlignment="gravity" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/detailsTextLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/treatmentPlanNameTextInput"
-            android:layout_toEndOf="@id/guideline">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/detailsTextInput"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/treatmentPlanNameTextInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/guideline">
 
-                android:inputType="textMultiLine"
-                android:maxLines="4"
-                android:minLines="4"
-                android:textSize="12sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/nameTextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="@string/treatment_name_prompt"
+                    android:maxLines="1"
+                    android:textSize="12sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/frequencyTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/detailsTextLayout"
-            android:layout_alignBaseline="@id/frequencyBox"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:clickable="false"
-            android:text="@string/frequency"
-            android:textAlignment="textEnd" />
-
-        <LinearLayout
-            android:id="@+id/frequencyBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/detailsTextLayout"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toEndOf="@id/guideline"
-            android:baselineAligned="true"
-            android:orientation="vertical">
-
-            <Spinner
-                android:id="@+id/freqTypeSpinner"
+            <TextView
+                android:id="@+id/detailsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/nameTextView"
+                android:layout_alignBaseline="@id/detailsTextLayout"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/treatment_details"
+                android:textAlignment="gravity" />
+
+            <View
+                android:id="@+id/nameDetailsDivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/detailsTextLayout"
+                android:layout_marginVertical="10dp"
+                android:background="?android:attr/listDivider" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/detailsTextLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/treatmentPlanNameTextInput"
+                android:layout_toEndOf="@id/guideline">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/detailsTextInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+
+                    android:inputType="textMultiLine"
+                    android:maxLines="4"
+                    android:minLines="4"
+                    android:textSize="12sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/frequencyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameDetailsDivider"
+                android:layout_alignBottom="@id/frequencyBox"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ems="6"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/frequency"
+                android:textAlignment="gravity" />
+
+            <LinearLayout
+                android:id="@+id/frequencyBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameDetailsDivider"
+                android:layout_marginHorizontal="10dp"
+                android:layout_toEndOf="@id/guideline"
+                android:baselineAligned="true"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/freqTypeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:entries="@array/freq_type_array"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/isPermanentcheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/startDateInput"
+                android:layout_toEndOf="@id/guideline"
+                android:text="@string/permanent" />
+
+            <TextView
+                android:id="@+id/StartDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frequencyBox"
+                android:layout_alignBaseline="@id/startDateInput"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/start_date"
+                android:textAlignment="gravity" />
+
+            <EditText
+                android:id="@+id/endDateInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/isPermanentcheckBox"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:entries="@array/freq_type_array"
-                android:spinnerMode="dropdown" />
-        </LinearLayout>
+                android:layout_toEndOf="@id/guideline"
+                android:ems="8"
+                android:inputType="date" />
 
-        <TextView
-            android:id="@+id/StartDateTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/frequencyTextView"
-            android:layout_alignBaseline="@id/startDate"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:clickable="false"
-            android:text="@string/start_date"
-            android:textAlignment="textEnd" />
+            <ImageButton
+                android:id="@+id/endDCalendarDialogB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/isPermanentcheckBox"
+                android:layout_alignTop="@id/endDateInput"
+                android:layout_toEndOf="@id/endDateInput"
+                app:srcCompat="@drawable/ic_calendar_button" />
 
-        <EditText
-            android:id="@+id/startDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/frequencyBox"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@id/guideline"
-            android:ems="8"
-            android:inputType="date" />
+            <TextView
+                android:id="@+id/endDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/isPermanentcheckBox"
+                android:layout_alignBaseline="@id/endDateInput"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:clickable="false"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/endDate"
+                android:textAlignment="gravity" />
 
-        <ImageButton
-            android:id="@+id/calendarDialogButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/frequencyBox"
-            android:layout_toEndOf="@id/startDate"
-            app:srcCompat="@drawable/ic_calendar_button" />
+            <EditText
+                android:id="@+id/startDateInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frequencyBox"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@id/guideline"
+                android:ems="8"
+                android:inputType="date" />
 
-        <TextView
-            android:id="@+id/formTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/startDate"
-            android:layout_alignBaseline="@id/formBox"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="5dp"
-            android:clickable="false"
-            android:orientation="vertical"
-            android:text="@string/treatment_form" />
+            <ImageButton
+                android:id="@+id/startDateCalendarDialogB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/isPermanentcheckBox"
+                android:layout_alignTop="@id/startDateInput"
+                android:layout_toEndOf="@id/startDateInput"
+                app:srcCompat="@drawable/ic_calendar_button" />
 
-        <LinearLayout
-            android:id="@+id/formBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/startDate"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toEndOf="@id/guideline"
-            android:orientation="vertical">
+            <View
+                android:id="@+id/frequencyDivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/endDateInput"
+                android:layout_marginVertical="10dp"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                android:id="@+id/formTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frequencyDivider"
+                android:layout_alignBaseline="@id/formBox"
+                android:layout_alignBottom="@id/formBox"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:clickable="false"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:orientation="vertical"
+                android:text="@string/treatment_form"
+                android:textAlignment="gravity" />
+
+            <LinearLayout
+                android:id="@+id/formBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/frequencyDivider"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@id/guideline"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/formTypeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/quantityTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/formTextView"
+                android:layout_alignBaseline="@id/quantityEditText"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="50dp"
+                android:ems="4"
+                android:gravity="start|center_vertical"
+                android:maxEms="6"
+                android:maxLines="2"
+                android:text="@string/quantity"
+                android:textAlignment="gravity" />
+
+            <EditText
+                android:id="@+id/quantityEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/formBox"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@id/guideline"
+                android:ems="5"
+                android:inputType="number" />
 
             <Spinner
-                android:id="@+id/formTypeSpinner"
+                android:id="@+id/quantityMetricSpinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/formBox"
+                android:layout_alignBaseline="@id/quantityEditText"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="50dp"
+                android:layout_toEndOf="@id/quantityEditText"
+                android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/quantityTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/formTextView"
-            android:layout_alignBaseline="@id/quantityEditText"
-            android:layout_marginStart="5dp"
-            android:layout_marginBottom="50dp"
-            android:text="@string/quantity" />
+            <View
+                android:id="@+id/formQuantityDivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/quantityEditText"
+                android:layout_marginVertical="10dp"
+                android:background="?android:attr/listDivider" />
 
-        <EditText
-            android:id="@+id/quantityEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/formBox"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="50dp"
-            android:layout_toEndOf="@id/guideline"
-            android:ems="5"
-            android:inputType="number" />
+            <TextView
+                android:id="@+id/savePlanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/formQuantityDivider"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="5dp"
+                android:background="@color/weekButtonOn"
+                android:maxHeight="40dp"
+                android:maxLines="1"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="10dp"
+                android:text="@string/save_button"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/quantityMetricSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/formBox"
-            android:layout_alignBaseline="@id/quantityEditText"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="50dp"
-            android:layout_toEndOf="@id/quantityEditText"
-            android:visibility="invisible" />
+            <TextView
+                android:id="@+id/cancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/formQuantityDivider"
+                android:layout_alignBaseline="@id/savePlanButton"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="5dp"
+                android:background="@color/selectionBackgroundBright"
+                android:maxHeight="40dp"
+                android:maxLines="1"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="10dp"
+                android:text="@android:string/cancel"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/savePlanButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/design_default_color_secondary_variant"
-            android:text="@string/save_button" />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/quantityEditText"
-            android:layout_alignBaseline="@id/savePlanButton"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
-            android:text="@android:string/cancel" />
-
-    </RelativeLayout>
-
-</androidx.core.widget.NestedScrollView>
+</RelativeLayout>

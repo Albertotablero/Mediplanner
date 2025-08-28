@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -62,7 +63,6 @@ public class PlanFragment extends DialogFragment {
 
     private boolean generationFlag = false;
 
-
     public PlanFragment(CloseListener closeListener) {
         super();
         isNew = true;
@@ -93,17 +93,18 @@ public class PlanFragment extends DialogFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        planBinding.fragmentContainerView.setVisibility(View.VISIBLE);
+
         planBinding.detailsTextInput.setHint(getResources().getString(R.string.treatment_details_prompt));
 
         // Setting up a date picker cause why not I fucking guess
         if (isNew) {
             LocalDate startDate = LocalDate.now();
             plan.setStartDate(startDate);
-            planBinding.startDate.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
+            planBinding.startDateInput.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
+
         }
 
-        planBinding.calendarDialogButton.setOnClickListener(new View.OnClickListener() {
+        planBinding.startDateCalendarDialogB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // calender class's instance and get current date , month and year from calender
@@ -116,14 +117,33 @@ public class PlanFragment extends DialogFragment {
 
                     @Override
                     public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
-                        planBinding.startDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                        planBinding.startDateInput.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
                     }
 
                 }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         });
+        planBinding.endDCalendarDialogB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
 
+                    @Override
+                    public void onDateSet(DatePicker dp, int year, int month, int dayOfMonth) {
+                        planBinding.endDateTextView.setText(String.format(Locale.getDefault(), MediPConstants.DATE_FORMAT, dayOfMonth, month, year));
+                    }
+
+                }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
         // Frequency Spinner
         SpinnerAdapter freqSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.freq_type_array), true);
         freqSpinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -138,10 +158,10 @@ public class PlanFragment extends DialogFragment {
                     planBinding.frequencyBox.removeViewAt(1);
 
                     // resetting visibility of start date after changing from specific dates
-                    if (planBinding.startDate.getVisibility() != View.VISIBLE) {
-                        planBinding.startDate.setVisibility(View.VISIBLE);
+                    if (planBinding.startDateInput.getVisibility() != View.VISIBLE) {
+                        planBinding.startDateInput.setVisibility(View.VISIBLE);
                         planBinding.StartDateTextView.setVisibility(View.VISIBLE);
-                        planBinding.calendarDialogButton.setVisibility(View.VISIBLE);
+                        planBinding.startDateCalendarDialogB.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -246,13 +266,14 @@ public class PlanFragment extends DialogFragment {
 
                 HoursListViewAdapter hoursAdapter = new HoursListViewAdapter(getContext(), plan.getPlanHours(), getParentFragmentManager());
                 dailyHoursView.setAdapter(hoursAdapter);
-                //dailyHoursView.setEnabled(false);
                 dailyHoursView.setNestedScrollingEnabled(true);
+                dailyHoursView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 // For adding another hour to the listview
                 Button addHours = new Button(getContext());
                 addHours.setText(R.string.add);
                 addHours.setOnClickListener(e -> addHours(hoursAdapter));
+                addHours.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 dailyHoursView.addFooterView(addHours);
                 return dailyHoursView;
@@ -302,8 +323,8 @@ public class PlanFragment extends DialogFragment {
             private @NonNull NoScrollListView setUpSpecificDateView() {
                 // Hiding unnecessary items
                 planBinding.StartDateTextView.setVisibility(View.INVISIBLE);
-                planBinding.startDate.setVisibility(View.INVISIBLE);
-                planBinding.calendarDialogButton.setVisibility(View.INVISIBLE);
+                planBinding.startDateInput.setVisibility(View.INVISIBLE);
+                planBinding.startDateCalendarDialogB.setVisibility(View.INVISIBLE);
 
                 NoScrollListView specificDatesListView = new NoScrollListView(getContext());
 
@@ -350,6 +371,19 @@ public class PlanFragment extends DialogFragment {
 
             }
         });
+
+        // Permanent or end Date
+        planBinding.isPermanentcheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int visibility = isChecked ? View.GONE : View.VISIBLE;
+                planBinding.endDateTextView.setVisibility(visibility);
+                planBinding.endDCalendarDialogB.setVisibility(visibility);
+                planBinding.endDateInput.setVisibility(visibility);
+                plan.setPermanent(isChecked);
+            }
+        });
+        if (isNew) planBinding.isPermanentcheckBox.setChecked(true);
 
         // Treatment Form Spinner
         SpinnerAdapter formSpinAdapter = new SpinnerAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.form_type_array), true);
@@ -457,11 +491,11 @@ public class PlanFragment extends DialogFragment {
         plan.setFrequencyMetric(planBinding.freqTypeSpinner.getSelectedItemPosition());
 
         // Saving star date if it's needed
-        if (planBinding.startDate.getVisibility() == View.VISIBLE) {
+        if (planBinding.startDateInput.getVisibility() == View.VISIBLE) {
             /*
              * TODO Magane different formats
              * */
-            String startDateText = planBinding.startDate.getText().toString();
+            String startDateText = planBinding.startDateInput.getText().toString();
             String[] starDateArray = startDateText.split("/");
             int year = Integer.parseInt(starDateArray[2]);
             int month = Integer.parseInt(starDateArray[1]);
@@ -522,7 +556,7 @@ public class PlanFragment extends DialogFragment {
         }
 
         LocalDate startDate = plan.getStartDate();
-        planBinding.startDate.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
+        planBinding.startDateInput.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
 
         switch (plan.getForm()) {
             case PILLS:
