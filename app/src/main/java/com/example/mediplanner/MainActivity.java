@@ -18,24 +18,19 @@ import com.example.mediplanner.calendar.DayTreatmentPlansFiller;
 import com.example.mediplanner.calendar.Month;
 import com.example.mediplanner.databinding.ActivityMainBinding;
 import com.example.mediplanner.date.PlanHours;
-import com.example.mediplanner.treatments.TreatmentsTabFragment;
-import com.example.mediplanner.utils.CloseListener;
-import com.example.mediplanner.plan.Plan;
 import com.example.mediplanner.plan.PlanFragment;
-import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
+import com.example.mediplanner.plan.TreatmentPlan;
+import com.example.mediplanner.treatmentPlansTab.TreatmentsArrayAdapter;
+import com.example.mediplanner.treatmentPlansTab.TreatmentsTabFragment;
+import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.utils.FrequencyMetric;
-import com.example.mediplanner.utils.MediPConstants;
 import com.example.mediplanner.utils.TabStageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import org.joda.time.LocalDate;
 
-import java.time.chrono.IsoChronology;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     // view binding
@@ -55,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private PlanFragment planFragment;
 
     //List of all treatment plans created
-    private static ArrayList<Plan> treatmentPlanList;
+    private static ArrayList<TreatmentPlan> treatmentPlanList;
 
     // List of all months with data stored
     private static ArrayList<Month> savedMonths = new ArrayList<>();
@@ -74,21 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         treatmentPlanList = new ArrayList<>();
         // TODO temp, remove after testing
-        treatmentPlanList.add(new Plan("Concerta 30g", "Tomar por la mañana con el desayuno.", true, -1, 1, 1, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
-        treatmentPlanList.add(new Plan("Loratadina", "Tomar por la noche.", true, -1, 1, 1, "Pill", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
-        Plan x = new Plan("Prueba h diarias", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY);
-        x.getPlanHours().add(new PlanHours(8, 0));
-        x.getPlanHours().add(new PlanHours(16, 0));
-        x.getPlanHours().add(new PlanHours(00, 0));
-        Plan y = new Plan("Socorro", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY);
-        y.getPlanHours().add(new PlanHours(8, 0));
-        y.getPlanHours().add(new PlanHours(16, 0));
-        y.getPlanHours().add(new PlanHours(00, 0));
-        y.setPermanent(false);
-        y.setEndDate(new LocalDate(2025, 8, 30));
-        treatmentPlanList.add(x);
-        treatmentPlanList.add(y);
-        treatmentPlanList.add(new Plan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+        createTestTreatmentPlans();
 
         //Setting up fragments
         fragmentManager = getSupportFragmentManager();
@@ -167,10 +148,27 @@ public class MainActivity extends AppCompatActivity {
          * */
     }
 
+    private static void createTestTreatmentPlans() {
+        treatmentPlanList.add(new TreatmentPlan("Concerta 30g", "Tomar por la mañana con el desayuno. Este texto es relleno para comprobar algo con las vistas etc etc etc", true, -1, 1, 1, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
+        treatmentPlanList.add(new TreatmentPlan("Loratadina", "Tomar por la noche.", true, -1, 1, 1, "Pill", LocalDate.now(), true, 2, FrequencyMetric.DAILY));
+        TreatmentPlan x = new TreatmentPlan("Prueba h diarias", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.DAILY);
+        x.getPlanHours().add(new PlanHours(8, 0));
+        x.getPlanHours().add(new PlanHours(16, 0));
+        x.getPlanHours().add(new PlanHours(00, 0));
+        TreatmentPlan y = new TreatmentPlan("Socorro", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.HOURLY);
+        y.setHourIntervalFrequency(2);
+        y.setForm(2);
+        y.setQuantity(200);
+        y.setQuantityMetric("mL");
+        treatmentPlanList.add(x);
+        treatmentPlanList.add(y);
+        treatmentPlanList.add(new TreatmentPlan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
+    }
+
     public static Month addMonth(Month month, String monthTag) {
         storedMonths.put(monthTag, month);
 
-        for (Plan p :
+        for (TreatmentPlan p :
                 treatmentPlanList) {
             if (p.isActive())
                 switch (p.getFrequencyMetric()) {
@@ -198,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.treatmentsTabFragment = treatmentsTabFragment;
     }
 
-    public static ArrayList<Plan> getTreatmentPlanList() {
+    public static ArrayList<TreatmentPlan> getTreatmentPlanList() {
         return treatmentPlanList;
     }
 

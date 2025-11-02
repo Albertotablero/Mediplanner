@@ -1,4 +1,4 @@
-package com.example.mediplanner.treatments;
+package com.example.mediplanner.treatmentPlansTab;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,20 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.mediplanner.R;
-import com.example.mediplanner.plan.Plan;
+import com.example.mediplanner.plan.TreatmentPlan;
+import com.example.mediplanner.utils.MoreButtonListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class TreatmentsArrayAdapter extends ArrayAdapter<Plan> {
+public class TreatmentsArrayAdapter extends ArrayAdapter<TreatmentPlan> {
 
-    private final ArrayList<Plan> plans;
+    private final ArrayList<TreatmentPlan> treatmentPlans;
+    private MoreButtonListener moreButtonListener;
 
-    public TreatmentsArrayAdapter(@NonNull Context context, ArrayList<Plan> planList) {
-        super(context, 0, planList);
-
-        plans = planList;
+    public TreatmentsArrayAdapter(@NonNull Context context, ArrayList<TreatmentPlan> treatmentPlanList, MoreButtonListener moreBListener) {
+        super(context, 0, treatmentPlanList);
+        treatmentPlans = treatmentPlanList;
+        moreButtonListener = moreBListener;
     }
 
     @NonNull
@@ -64,8 +65,8 @@ public class TreatmentsArrayAdapter extends ArrayAdapter<Plan> {
         TextView moreButton = convertView.findViewById(R.id.moreTreatmentsTextView);
         moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
+                moreButtonListener.getMoreInfoFragment(treatmentPlans.get(position));
             }
         });
 
@@ -73,7 +74,7 @@ public class TreatmentsArrayAdapter extends ArrayAdapter<Plan> {
     }
 
     @Override
-    public void add(@Nullable Plan object) {
+    public void add(@Nullable TreatmentPlan object) {
         super.add(object);
     }
 }

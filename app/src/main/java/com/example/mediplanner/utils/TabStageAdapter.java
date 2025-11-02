@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.calendar.CalendarTabFragment;
-import com.example.mediplanner.treatments.TreatmentsTabFragment;
+import com.example.mediplanner.treatmentPlansTab.TreatmentsTabFragment;
 
 public class TabStageAdapter extends FragmentStateAdapter {
     public TabStageAdapter(@NonNull FragmentActivity fragmentActivity) {

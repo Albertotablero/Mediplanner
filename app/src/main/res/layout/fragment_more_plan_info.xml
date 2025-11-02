@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".treatmentPlan.MorePlanInfoFragment" >
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="5dp"
+        android:text="PLACEHOLDER"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/detailsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameTextView"
+        android:layout_margin="4dp"
+        android:background="@color/black">
+
+        <TextView
+            android:id="@+id/detailsTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="PLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDERPLACEHOLDER" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/frequencyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailsContainer"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        android:text="@string/frequency"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textStyle="bold" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frequencyText"
+        app:barrierDirection="top" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/frequencyText"
+        android:layout_marginBottom="10dp"
+        android:background="@color/light_purple" />
+
+    <RelativeLayout
+        android:id="@+id/frequencyContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="20dp">
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/startDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frequencyContainer"
+        android:layout_alignEnd="@id/divider3"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:text="@string/start_date"
+        android:textAlignment="center"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/endDateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frequencyContainer"
+        android:layout_alignBaseline="@id/startDateText"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:layout_toEndOf="@id/divider3"
+        android:text="@string/endDate"
+        android:textAlignment="center"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/startDateText"
+        android:background="@color/light_purple" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/startDateText"
+        android:layout_alignBottom="@id/startDateDisplayText"
+        android:layout_centerHorizontal="true"
+        android:background="@color/light_purple" />
+
+    <TextView
+        android:id="@+id/startDateDisplayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:layout_alignEnd="@id/divider3"
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="20dp"
+        android:minEms="5"
+        android:text="00/00/0000"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/endDateDisplayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:layout_alignStart="@id/divider3"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="20dp"
+        android:minEms="5"
+        android:text="Permanent"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/formText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startDateDisplayText"
+        android:layout_alignEnd="@id/divider5"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/treatment_form"
+        android:textAlignment="center"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/quantityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startDateDisplayText"
+        android:layout_alignStart="@id/divider5"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/quantity"
+        android:textAlignment="center"
+        android:textColor="@color/selectionBackgroundBright"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/formText"
+        android:background="@color/light_purple" />
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider3"
+        android:layout_alignBottom="@id/formDisplayText"
+        android:layout_centerHorizontal="true"
+        android:background="@color/light_purple" />
+
+    <TextView
+        android:id="@+id/formDisplayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider4"
+        android:layout_alignEnd="@id/divider5"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/quantityDisplayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider4"
+        android:layout_alignBaseline="@id/formDisplayText"
+        android:layout_alignStart="@id/divider5"
+        android:layout_alignBottom="@id/formDisplayText"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:gravity="center_horizontal|top"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/editPlanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:background="@color/weekButtonOn"
+        android:minEms="6"
+        android:paddingVertical="10dp"
+        android:text="@string/Edit"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:background="@color/selectionBackgroundBright"
+        android:minEms="6"
+        android:paddingVertical="10dp"
+        android:text="@string/back_button"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+</RelativeLayout>

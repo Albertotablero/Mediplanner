@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="calendar_tab">Calendario</string>
-    <string name="new_plan_tittle">Añadir nuevo plan de tratamiento</string>
+    <string name="new_plan_tittle">Añadir nuevo treatmentPlan de tratamiento</string>
     <string name="add">Más</string>
-    <string name="edit_plan_tittle">Editar plan de tratamiento</string>
-    <string name="treatment_name_prompt">Nombre para el plan de tratamiento</string>
+    <string name="edit_plan_tittle">Editar treatmentPlan de tratamiento</string>
+    <string name="treatment_name_prompt">Nombre para el treatmentPlan de tratamiento</string>
     <string name="treatment_details">Detalles</string>
     <string name="treatment_details_prompt">Detalles importantes sobre el tratamiento (por ejemplo, como tomar)</string>
     <string name="name">Nombre</string>
@@ -75,11 +75,11 @@
     <string name="removeDatePrompt">¿Seguro que desea eliminar esta fecha?</string>
     <string name="quantity">Cantidad</string>
     <string name="more">Más</string>
-    <string name="addButtonTooltip">Crear un nuevo plan de tratamiento</string>
+    <string name="addButtonTooltip">Crear un nuevo treatmentPlan de tratamiento</string>
     <string name="fillOutName">Por favor introduzca un nombre con al menos 3 carácteres</string>
     <string name="selectFreq">Por favor seleccione un tipo de Frecuencia</string>
     <string name="selectForm">Por favor seleccione el Medio</string>
-    <string name="no_item_selected_warning">Por favor seleccione un plan de tratamiento primero.</string>
+    <string name="no_item_selected_warning">Por favor seleccione un treatmentPlan de tratamiento primero.</string>
     <string name="removeTreatmentWarningTitle">Eliminar Plan de Tratamiento</string>
     <string name="removeTreatmentPrompt">¿Seguro que desea eliminar este Plan de Tratamiento?</string>
     <string name="december">Diciembre</string>
@@ -89,5 +89,6 @@
     <string name="hours">horas</string>
     <string name="permanent">Permanente</string>
     <string name="endDate">Fecha final</string>
+    <string name="back_button">Volver</string>
 
 </resources>

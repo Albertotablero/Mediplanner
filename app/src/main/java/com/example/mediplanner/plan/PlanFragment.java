@@ -8,14 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,25 +20,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
-import com.example.mediplanner.date.PlanHours;
-import com.example.mediplanner.treatments.TreatmentsArrayAdapter;
+import com.example.mediplanner.treatmentPlansTab.TreatmentsArrayAdapter;
 import com.example.mediplanner.utils.CloseListener;
-import com.example.mediplanner.utils.HoursInADayAdapter;
-import com.example.mediplanner.utils.HoursListViewAdapter;
 import com.example.mediplanner.utils.MediPConstants;
-import com.example.mediplanner.utils.NoScrollListView;
-import com.example.mediplanner.utils.SpecificDateViewAdapter;
 import com.example.mediplanner.utils.SpinnerAdapter;
 import com.example.mediplanner.utils.TreatmentForm;
 
-import org.joda.time.DateTime;
-import org.joda.time.Hours;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.Minutes;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -51,7 +36,7 @@ public class PlanFragment extends DialogFragment {
 
     public static final String DATE_FORMAT = MediPConstants.DATE_FORMAT;
     private PlanFragmentViewBinding planBinding;
-    private Plan plan;
+    private TreatmentPlan treatmentPlan;
     private DatePickerDialog datePickerDialog;
     private ListView planList;
 
@@ -66,16 +51,25 @@ public class PlanFragment extends DialogFragment {
     public PlanFragment(CloseListener closeListener) {
         super();
         isNew = true;
-        plan = new Plan();
+        treatmentPlan = new TreatmentPlan();
         this.closeListener = closeListener;
     }
 
-    public PlanFragment(Plan plan, ListView treatmentPlansListView) {
+    public PlanFragment(TreatmentPlan treatmentPlan, ListView treatmentPlansListView) {
         super();
         isNew = false;
-        this.plan = plan;
+        this.treatmentPlan = treatmentPlan;
         planList = treatmentPlansListView;
     }
+
+    public PlanFragment(TreatmentPlan treatmentPlan, ListView treatmentPlansListView, CloseListener closeListener) {
+        super();
+        this.isNew = false;
+        this.treatmentPlan = treatmentPlan;
+        this.planList = treatmentPlansListView;
+        this.closeListener = closeListener;
+    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +93,7 @@ public class PlanFragment extends DialogFragment {
         // Setting up a date picker cause why not I fucking guess
         if (isNew) {
             LocalDate startDate = LocalDate.now();
-            plan.setStartDate(startDate);
+            treatmentPlan.setStartDate(startDate);
             planBinding.startDateInput.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
 
         }
@@ -165,211 +159,16 @@ public class PlanFragment extends DialogFragment {
                     }
                 }
 
-                View child = null;
-                switch (position) {
-                    // EVERY X HOURS
-                    case 1:
-                        child = setUpHoursIntervalView();
-                        break;
-                    //   DAILY
-                    case 2:
-                        child = setUpDailyView();
-                        break;
-                    // WEEKLY
-                    case 3:
-                        child = setUpWeeklyView();
-                        break;
-                    // SPECIFIC DATES
-                    case 6:
-                        child = setUpSpecificDateView();
-                        break;
-                    default:
-                        break;
+                View child = getFrequencyView(treatmentPlan, position);
 
-                }
                 if (child != null) planBinding.frequencyBox.addView(child);
             }
-
-            private @NonNull RelativeLayout setUpHoursIntervalView() {
-                RelativeLayout houtIntervalView = (RelativeLayout) getLayoutInflater().inflate(R.layout.hour_interval_frequency_view, null, false);
-
-                EditText hoursInterval = houtIntervalView.findViewById(R.id.hourIntervalEditText);
-                hoursInterval.setHint(R.string.dailyFreqHintText);
-
-                // This list will show expected hours to be set up on a day
-                NoScrollListView list = houtIntervalView.findViewById(R.id.hoursInADay);
-                ArrayList<PlanHours> planHours = new ArrayList<>();
-                HoursInADayAdapter adapter = new HoursInADayAdapter(getContext(), 0, planHours);
-                list.setAdapter(adapter);
-
-                // Number pickers for init Hour from which the rest will be calculated, sharing a listener
-                NumberPicker hourPicker = houtIntervalView.findViewById(R.id.monthPicker);
-                hourPicker.setTag("hourP");
-                hourPicker.setMinValue(0);
-                hourPicker.setMaxValue(23);
-
-                NumberPicker minutePicker = houtIntervalView.findViewById(R.id.yearPicker);
-                minutePicker.setTag("minuteP");
-                minutePicker.setMinValue(0);
-                minutePicker.setMaxValue(59);
-
-                PlanHours iniTHourMinutePicked = new PlanHours(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour());
-
-                NumberPicker.OnValueChangeListener onValueChangedListener = new NumberPicker.OnValueChangeListener() {
-                    @Override
-                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                        if (!generationFlag && oldVal != newVal && hoursInterval.getText().length() != 0) {
-                            generationFlag = true;
-                            // Ill comment this later
-                            iniTHourMinutePicked.hours = Hours.hours(hourPicker.getValue());
-                            iniTHourMinutePicked.minutes = Minutes.minutes(minutePicker.getValue());
-                            adapter.clear();
-                            boolean isSameDay = true;
-                            PlanHours hoursToAdd = iniTHourMinutePicked;
-
-                            // Adding hours to preview the distribution in a day
-                            do {
-                                LocalDateTime d = new LocalDateTime(plan.getStartDate().getYear(), plan.getStartDate().getMonthOfYear(),
-                                        plan.getStartDate().getDayOfMonth(), hoursToAdd.hours.getHours(), hoursToAdd.minutes.getMinutes());
-                                LocalDateTime nD = d.plusHours(Integer.parseInt(hoursInterval.getText().toString()));
-
-                                if (nD.getDayOfMonth() == d.getDayOfMonth()) {
-                                    adapter.add(hoursToAdd);
-                                    hoursToAdd = new PlanHours(nD.getHourOfDay(), nD.getMinuteOfHour());
-                                } else {
-                                    isSameDay = false;
-                                }
-
-                            } while (isSameDay);
-                            generationFlag = false;
-                        }
-                    }
-                };
-                hourPicker.setOnValueChangedListener(onValueChangedListener);
-                minutePicker.setOnValueChangedListener(onValueChangedListener);
-
-                hourPicker.setValue(iniTHourMinutePicked.hours.getHours());
-                minutePicker.setValue(iniTHourMinutePicked.minutes.getMinutes());
-
-                return houtIntervalView;
-            }
-
-            private @NonNull ListView setUpDailyView() {
-                // Create list view to add or remove hours for daily treatments
-                NoScrollListView dailyHoursView = new NoScrollListView(getContext());
-
-                // Setting up adapter for list view
-                if (plan.getPlanHours().isEmpty() && isNew) {
-                    DateTime now = DateTime.now();
-                    plan.getPlanHours().add(new PlanHours(now.getHourOfDay(), now.getMinuteOfHour()));
-                }
-
-                HoursListViewAdapter hoursAdapter = new HoursListViewAdapter(getContext(), plan.getPlanHours(), getParentFragmentManager());
-                dailyHoursView.setAdapter(hoursAdapter);
-                dailyHoursView.setNestedScrollingEnabled(true);
-                dailyHoursView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                // For adding another hour to the listview
-                Button addHours = new Button(getContext());
-                addHours.setText(R.string.add);
-                addHours.setOnClickListener(e -> addHours(hoursAdapter));
-                addHours.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                dailyHoursView.addFooterView(addHours);
-                return dailyHoursView;
-            }
-
-            private @NonNull RelativeLayout setUpWeeklyView() {
-                // Inflating a week day piker for the weekly frequency type
-                RelativeLayout weeklyView = (RelativeLayout) LayoutInflater.from(getContext()).inflate(R.layout.week_day_picker_widget, planBinding.frequencyBox, false);
-                // Setting up functionality for each button
-                ArrayList<Boolean> weeksActive = new ArrayList<Boolean>();
-                for (int i = 0; i < 7; i++) {
-                    weeksActive.add(false);
-                }
-
-                // Monday
-                setUpWeekButtons(weeklyView, R.id.mondayButton, 0, weeksActive);
-                // Tuesday
-                setUpWeekButtons(weeklyView, R.id.tuesdayButton, 1, weeksActive);
-                // Wednesday
-                setUpWeekButtons(weeklyView, R.id.wednesdayButton, 2, weeksActive);
-                // Thursday
-                setUpWeekButtons(weeklyView, R.id.thursdayButton, 3, weeksActive);
-                // Friday
-                setUpWeekButtons(weeklyView, R.id.fridayButton, 4, weeksActive);
-                // Saturday
-                setUpWeekButtons(weeklyView, R.id.saturdayButton, 5, weeksActive);
-                // Sunday
-                setUpWeekButtons(weeklyView, R.id.sundayButton, 6, weeksActive);
-
-                //Managing the hour for the treatment
-                HoursListViewAdapter hoursAdapterWeekly = new HoursListViewAdapter(getContext(), plan.getPlanHours(), getParentFragmentManager());
-                NoScrollListView weeklyHours = weeklyView.findViewById(R.id.hoursListWeekly);
-                weeklyHours.setAdapter(hoursAdapterWeekly);
-
-                // Button for adding more hours
-                Button addHours = new Button(getContext());
-                addHours.setText(R.string.add);
-                addHours.setOnClickListener(e -> addHours(hoursAdapterWeekly));
-                weeklyHours.addFooterView(addHours);
-
-                if (plan.getPlanHours().isEmpty() && isNew)
-                    hoursAdapterWeekly.add(new PlanHours(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour()));
-
-                return weeklyView;
-            }
-
-            private @NonNull NoScrollListView setUpSpecificDateView() {
-                // Hiding unnecessary items
-                planBinding.StartDateTextView.setVisibility(View.INVISIBLE);
-                planBinding.startDateInput.setVisibility(View.INVISIBLE);
-                planBinding.startDateCalendarDialogB.setVisibility(View.INVISIBLE);
-
-                NoScrollListView specificDatesListView = new NoScrollListView(getContext());
-
-                SpecificDateViewAdapter specificDateViewAdapter = new SpecificDateViewAdapter(getContext(), plan.getSpecificDates(), DATE_FORMAT);
-                specificDatesListView.setAdapter(specificDateViewAdapter);
-
-                if (plan.getSpecificDates().isEmpty()) {
-                    LocalDate now = LocalDate.now();
-                    specificDateViewAdapter.add(String.format(Locale.getDefault(), DATE_FORMAT, now.getDayOfMonth(), now.getMonthOfYear(), now.getYear()));
-                }
-
-                Button addDateButton = new Button(getContext());
-                addDateButton.setText(R.string.add);
-                addDateButton.setOnClickListener(e -> addDate(specificDateViewAdapter));
-
-                specificDatesListView.addFooterView(addDateButton);
-                return specificDatesListView;
-            }
-
-            private void addDate(SpecificDateViewAdapter specificDateViewAdapter) {
-                LocalDate today = LocalDate.now();
-                int year = today.getYear();
-                int month = today.getMonthOfYear();
-                int day = today.getDayOfMonth();
-
-                specificDateViewAdapter.add(String.format(DATE_FORMAT, day, month, year));
-
-            }
-
-            private void addHours(HoursListViewAdapter hoursAdapter) {
-                hoursAdapter.add(new PlanHours(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour()));
-            }
-
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
 
-            public void setUpWeekButtons(RelativeLayout weeklyView, int buttonID, int dayOfWeek, ArrayList<Boolean> weeksActive) {
-                TextView b = weeklyView.findViewById(buttonID);
-                b.setActivated(false);
-                b.setOnClickListener(e -> changeWeekButtonSate(weeksActive, dayOfWeek, b));
-
-            }
         });
 
         // Permanent or end Date
@@ -380,7 +179,7 @@ public class PlanFragment extends DialogFragment {
                 planBinding.endDateTextView.setVisibility(visibility);
                 planBinding.endDCalendarDialogB.setVisibility(visibility);
                 planBinding.endDateInput.setVisibility(visibility);
-                plan.setPermanent(isChecked);
+                treatmentPlan.setPermanent(isChecked);
             }
         });
         if (isNew) planBinding.isPermanentcheckBox.setChecked(true);
@@ -442,6 +241,7 @@ public class PlanFragment extends DialogFragment {
                     Toast.makeText(getContext(), R.string.selectForm, Toast.LENGTH_SHORT).show();
                 } else {
                     savePlan();
+                    if (closeListener != null) closeListener.OnClose(isCanceled);
                     getParentFragmentManager().beginTransaction().remove(PlanFragment.this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
                 }
             }
@@ -456,14 +256,39 @@ public class PlanFragment extends DialogFragment {
             }
         });
 
-        if (!isNew) loadPlanInfo(plan);
+        if (!isNew) loadPlanInfo(treatmentPlan);
     }
 
-    // Negating the boolean representing the active state of the button and assigning that state to the button so that it changes bg dynamically
-    private void changeWeekButtonSate(ArrayList<Boolean> daysActive, int dayOfWeek, TextView weekdayButton) {
-        daysActive.set(dayOfWeek, !daysActive.get(dayOfWeek));
-        weekdayButton.setActivated(daysActive.get(dayOfWeek));
+    public View getFrequencyView(TreatmentPlan treatmentPlan, int frequency) {
+        View view = null;
+        switch (frequency) {
+            // EVERY X HOURS
+            case 1:
+                view = FrequencyViewGenerator.setUpHoursIntervalEditView(getLayoutInflater(), getContext(), treatmentPlan);
+                break;
+            // DAILY
+            case 2:
+                view = FrequencyViewGenerator.setUpDailyEditView(getLayoutInflater(), getContext(), treatmentPlan, isNew, getParentFragmentManager());
+                break;
+            // WEEKLY
+            case 3:
+                view = FrequencyViewGenerator.setUpWeeklyEditView(getLayoutInflater(), getContext(), treatmentPlan, isNew, getParentFragmentManager());
+                break;
+            // SPECIFIC DATES
+            case 6:
+                planBinding.StartDateTextView.setVisibility(View.INVISIBLE);
+                planBinding.startDateInput.setVisibility(View.INVISIBLE);
+                planBinding.startDateCalendarDialogB.setVisibility(View.INVISIBLE);
+                view = FrequencyViewGenerator.setUpSpecificDateEditView(getContext(), treatmentPlan);
+                break;
+            default:
+                break;
+
+        }
+        return view;
+
     }
+
 
     // uhhhhh size??
     @Override
@@ -477,18 +302,18 @@ public class PlanFragment extends DialogFragment {
 
     private void savePlan() {
         // Setting the new plan to active by default
-        if (isNew) plan.setActive(true);
+        if (isNew) treatmentPlan.setActive(true);
         // Saving name without checking because the check occurs earlier
-        plan.setName(planBinding.nameTextInput.getText().toString());
+        treatmentPlan.setName(planBinding.nameTextInput.getText().toString());
 
         // Catching nullpointer exception that results from trying to get empty text from an EditText
         try {
-            plan.setDetails(planBinding.detailsTextInput.getText().toString());
+            treatmentPlan.setDetails(planBinding.detailsTextInput.getText().toString());
         } catch (NullPointerException e) {
-            plan.setDetails("");
+            treatmentPlan.setDetails("");
         }
 
-        plan.setFrequencyMetric(planBinding.freqTypeSpinner.getSelectedItemPosition());
+        treatmentPlan.setFrequencyMetric(planBinding.freqTypeSpinner.getSelectedItemPosition());
 
         // Saving star date if it's needed
         if (planBinding.startDateInput.getVisibility() == View.VISIBLE) {
@@ -500,16 +325,16 @@ public class PlanFragment extends DialogFragment {
             int year = Integer.parseInt(starDateArray[2]);
             int month = Integer.parseInt(starDateArray[1]);
             int day = Integer.parseInt(starDateArray[0]);
-            plan.setStartDate(new LocalDate(year, month, day));
+            treatmentPlan.setStartDate(new LocalDate(year, month, day));
         }
 
-        plan.setForm(planBinding.formTypeSpinner.getSelectedItemPosition());
+        treatmentPlan.setForm(planBinding.formTypeSpinner.getSelectedItemPosition());
 
-        if (plan.getForm() == TreatmentForm.LIQUID || plan.getForm() == TreatmentForm.INJECTION) {
-            plan.setQuantity(Float.parseFloat(planBinding.quantityEditText.getText().toString()));
-            plan.setQuantityMetric(planBinding.quantityMetricSpinner.getSelectedItem().toString());
-        } else if (plan.getForm() != TreatmentForm.CREAM) {
-            plan.setQuantity(Float.parseFloat(planBinding.quantityEditText.getText().toString()));
+        if (treatmentPlan.getForm() == TreatmentForm.LIQUID || treatmentPlan.getForm() == TreatmentForm.INJECTION) {
+            treatmentPlan.setQuantity(Float.parseFloat(planBinding.quantityEditText.getText().toString()));
+            treatmentPlan.setQuantityMetric(planBinding.quantityMetricSpinner.getSelectedItem().toString());
+        } else if (treatmentPlan.getForm() != TreatmentForm.CREAM) {
+            treatmentPlan.setQuantity(Float.parseFloat(planBinding.quantityEditText.getText().toString()));
         }
 
         // Notifying the Listview of changes
@@ -520,15 +345,16 @@ public class PlanFragment extends DialogFragment {
 
     }
 
-    public void setPlan(Plan plan) {
-        this.plan = plan;
+    public void setPlan(TreatmentPlan treatmentPlan) {
+        this.treatmentPlan = treatmentPlan;
     }
 
-    private void loadPlanInfo(Plan plan) {
-        planBinding.nameTextInput.setText(plan.getName());
-        if (!plan.getDetails().isEmpty()) planBinding.detailsTextInput.setText(plan.getDetails());
+    private void loadPlanInfo(TreatmentPlan treatmentPlan) {
+        planBinding.nameTextInput.setText(treatmentPlan.getName());
+        if (!treatmentPlan.getDetails().isEmpty())
+            planBinding.detailsTextInput.setText(treatmentPlan.getDetails());
 
-        switch (plan.getFrequencyMetric()) {
+        switch (treatmentPlan.getFrequencyMetric()) {
             case HOURLY:
                 planBinding.freqTypeSpinner.setSelection(1);
                 break;
@@ -555,10 +381,10 @@ public class PlanFragment extends DialogFragment {
                 break;
         }
 
-        LocalDate startDate = plan.getStartDate();
+        LocalDate startDate = treatmentPlan.getStartDate();
         planBinding.startDateInput.setText(String.format(Locale.getDefault(), DATE_FORMAT, startDate.dayOfMonth().get(), startDate.monthOfYear().get(), startDate.year().get()));
 
-        switch (plan.getForm()) {
+        switch (treatmentPlan.getForm()) {
             case PILLS:
                 planBinding.formTypeSpinner.setSelection(1);
                 break;
@@ -586,7 +412,7 @@ public class PlanFragment extends DialogFragment {
         }
 
         DecimalFormat format = new DecimalFormat("#.##");
-        planBinding.quantityEditText.setText(format.format(plan.getQuantity()));
+        planBinding.quantityEditText.setText(format.format(treatmentPlan.getQuantity()));
     }
 
     public void setNew(boolean aNew) {
@@ -597,8 +423,8 @@ public class PlanFragment extends DialogFragment {
         return isNew;
     }
 
-    public Plan getPlan() {
-        return plan;
+    public TreatmentPlan getPlan() {
+        return treatmentPlan;
     }
 
     @Override

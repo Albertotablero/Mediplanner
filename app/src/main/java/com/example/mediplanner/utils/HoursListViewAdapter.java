@@ -32,9 +32,18 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
     private HourPickerDialogFragment hourPickerDialogFragment;
     private FragmentManager fragmentManager;
 
+    private PlanHours planHours;
+
     public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<PlanHours> objects, FragmentManager fManager) {
         super(context, 0, objects);
         fragmentManager = fManager;
+        specifiedHours = objects;
+        hour = Hours.hours(DateTime.now().getHourOfDay());
+        minutes = Minutes.minutes(DateTime.now().getMinuteOfHour());
+    }
+
+    public HoursListViewAdapter(@NonNull Context context, @NonNull ArrayList<PlanHours> objects) {
+        super(context, 0, objects);
         specifiedHours = objects;
         hour = Hours.hours(DateTime.now().getHourOfDay());
         minutes = Minutes.minutes(DateTime.now().getMinuteOfHour());
@@ -47,45 +56,48 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
         if (convertView == null)
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.hours_list_item, parent, false);
 
-        PlanHours item = getItem(position);
+        planHours = getItem(position);
 
         //Setting up pickers with hours and minutes
         String f = "%02d";
         Locale l = Locale.getDefault();
 
         TextView hour = convertView.findViewById(R.id.pickedHour);
-        hour.setText(String.format(l, f, item.hours.getHours()));
+        hour.setText(String.format(l, f, planHours.hours.getHours()));
 
         TextView minutes = convertView.findViewById(R.id.pickedMinute);
-        minutes.setText(String.format(l, f, item.minutes.getMinutes()));
+        minutes.setText(String.format(l, f, planHours.minutes.getMinutes()));
 
         LinearLayout hoursView = convertView.findViewById(R.id.hoursLayout);
-
-        hoursView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                hourPickerDialogFragment = new HourPickerDialogFragment(item.hours.getHours(), item.minutes.getMinutes(), new CloseListener() {
-                    @Override
-                    public void OnClose(boolean isCanceled) {
-                        item.hours = Hours.hours(hourPickerDialogFragment.getBinding().hoursPicker.getValue());
-                        item.minutes = Minutes.minutes(hourPickerDialogFragment.getBinding().minutesPicker.getValue());
-                        notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void OnClose(int month, int year) {
-
-                    }
-                });
-                hourPickerDialogFragment.show(fragmentManager, "meh");
-            }
-        });
-
-        // Manage button for removing an hour
         TextView removeItem = convertView.findViewById((R.id.removeHourButon));
-        removeItem.setOnClickListener(e -> removeHour(e, position));
 
+        // This is only necessary for Edit and not for Display and when call for Display no FragmentManager is set, as it's not needed
+        if (fragmentManager != null) {
+            hoursView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    hourPickerDialogFragment = new HourPickerDialogFragment(planHours.hours.getHours(), planHours.minutes.getMinutes(), new CloseListener() {
+                        @Override
+                        public void OnClose(boolean isCanceled) {
+                            planHours.hours = Hours.hours(hourPickerDialogFragment.getBinding().hoursPicker.getValue());
+                            planHours.minutes = Minutes.minutes(hourPickerDialogFragment.getBinding().minutesPicker.getValue());
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void OnClose(int month, int year) {
+
+                        }
+                    });
+                    hourPickerDialogFragment.show(fragmentManager, "meh");
+                }
+            });
+            // Manage button for removing an hour
+            removeItem.setOnClickListener(e -> removeHour(e, position));
+        } else {
+            removeItem.setVisibility(View.GONE);
+        }
 
         return convertView;
     }

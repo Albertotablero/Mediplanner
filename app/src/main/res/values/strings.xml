@@ -9,11 +9,11 @@
     //Treatments tab
     <string name="no_item_selected_warning">Please select a Treatment Plan to first.</string>
     //Plan creation and edition fragment ui strings
-    <string name="new_plan_tittle">Add new treatment plan</string>
-    <string name="edit_plan_tittle">Edit treatment plan</string>
+    <string name="new_plan_tittle">Add new treatment treatmentPlan</string>
+    <string name="edit_plan_tittle">Edit treatment treatmentPlan</string>
 
     <string name="name">Name</string>
-    <string name="treatment_name_prompt">Name for the treatment plan</string>
+    <string name="treatment_name_prompt">Name for the treatment treatmentPlan</string>
 
     <string name="treatment_details">Details</string>
     <string name="treatment_details_prompt">Important details about the treatment (how to take, etc.)</string>
@@ -106,8 +106,8 @@
     <string name="hours">hours</string>
     <string name="permanent">Permanent</string>
     <string name="endDate">End Date</string>
+    <string name="back_button">Back</string>
     //Plan Creation End
-
 
 
 </resources>

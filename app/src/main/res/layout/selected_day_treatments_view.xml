@@ -23,7 +23,7 @@
         android:layout_below="@id/daytreatmentName"
         android:layout_alignEnd="@id/completeButton"
         android:layout_margin="5dp"
-        android:layout_toLeftOf="@id/moreTreatmentsButtons"
+        android:layout_toLeftOf="@id/moreTreatmentsButton"
         android:text="8:00"
         android:textSize="14sp" />
 
@@ -78,7 +78,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/moreTreatmentsButtons"
+        android:id="@+id/moreTreatmentsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/dayTreatmentHout"

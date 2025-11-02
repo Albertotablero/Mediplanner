@@ -8,11 +8,12 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 
-public class Plan {
+public class TreatmentPlan {
 
     private String name = ""; //Name of the medicine
     private String details = ""; //Important details to take note of
     private FrequencyMetric frequencyMetric; // How to measure frequency
+    private int hourIntervalFrequency;
     private LocalDate startDate; // Start date of treatment plan
     private boolean isPermanent; // Whether is permanent as opposed to having a set duration
     private LocalDate endDate;
@@ -27,8 +28,8 @@ public class Plan {
     private ArrayList<Boolean> weekdaysActive;
 
 
-    public Plan(String name, String details, boolean isActive, int freqMetric, int form, float quantity, String quantityMetric,
-                LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric frequencyMetric) {
+    public TreatmentPlan(String name, String details, boolean isActive, int freqMetric, int form, float quantity, String quantityMetric,
+                         LocalDate startDate, boolean isPermanent, float duration, FrequencyMetric frequencyMetric) {
         initialize();
         setName(name);
         setDetails(details);
@@ -45,7 +46,7 @@ public class Plan {
         setStartDate(startDate);
     }
 
-    public Plan() {
+    public TreatmentPlan() {
         initialize();
     }
 
@@ -210,4 +211,11 @@ public class Plan {
         return endDate;
     }
 
+    public int getHourIntervalFrequency() {
+        return hourIntervalFrequency;
+    }
+
+    public void setHourIntervalFrequency(int hourIntervalFrequency) {
+        this.hourIntervalFrequency = hourIntervalFrequency;
+    }
 }

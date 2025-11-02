@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".treatments.TreatmentsTabFragment"
+    tools:context=".treatmentPlansTab.TreatmentsTabFragment"
     android:tag="treatment_tab_fragment">
 
 

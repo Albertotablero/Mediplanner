@@ -1,15 +1,8 @@
-package com.example.mediplanner.treatments;
+package com.example.mediplanner.treatmentPlansTab;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +10,18 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.FragmentTreatmentsTabBinding;
-import com.example.mediplanner.plan.Plan;
+import com.example.mediplanner.plan.MorePlanInfoFragment;
 import com.example.mediplanner.plan.PlanFragment;
+import com.example.mediplanner.plan.TreatmentPlan;
+import com.example.mediplanner.utils.MoreButtonListener;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class TreatmentsTabFragment extends Fragment {
 
     private FragmentTreatmentsTabBinding binding;
-    private ArrayList<Plan> treatmentPlans;
+    private ArrayList<TreatmentPlan> treatmentPlans;
     private int selectedListItem = -1;
     private TreatmentsArrayAdapter treatmentListVAdapter;
 
@@ -51,7 +51,12 @@ public class TreatmentsTabFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Adding the treatment lists and adapter to the listView
 
-        treatmentListVAdapter = new TreatmentsArrayAdapter(getContext(), treatmentPlans);
+        treatmentListVAdapter = new TreatmentsArrayAdapter(getContext(), treatmentPlans, new MoreButtonListener() {
+            @Override
+            public void getMoreInfoFragment(TreatmentPlan treatmentPlan) {
+                generateMoreInfoFragment(treatmentPlan);
+            }
+        });
 
         binding.treatmentPlansListView.setAdapter(treatmentListVAdapter);
         binding.treatmentPlansListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
@@ -63,11 +68,11 @@ public class TreatmentsTabFragment extends Fragment {
                 if (selectedListItem != position) {
                     // All this just to change the text color of individual elements when the card is selected or not
                     if (selectedListItem != -1) {
-                        View previeous = binding.treatmentPlansListView.getChildAt(selectedListItem);
-                        previeous.findViewById(R.id.nameTreatmentsTextView).setActivated(false);
-                        previeous.findViewById(R.id.descriptionTreatments).setActivated(false);
-                        previeous.findViewById(R.id.quantityTextView).setActivated(false);
-                        previeous.findViewById(R.id.quantityMetricTextView).setActivated(false);
+                        View previous = binding.treatmentPlansListView.getChildAt(selectedListItem);
+                        previous.findViewById(R.id.nameTreatmentsTextView).setActivated(false);
+                        previous.findViewById(R.id.descriptionTreatments).setActivated(false);
+                        previous.findViewById(R.id.quantityTextView).setActivated(false);
+                        previous.findViewById(R.id.quantityMetricTextView).setActivated(false);
 
                     }
                     selectedListItem = position;
@@ -90,10 +95,10 @@ public class TreatmentsTabFragment extends Fragment {
                 if (selectedListItem == -1) {
                     Toast.makeText(getContext(), R.string.no_item_selected_warning, Toast.LENGTH_SHORT).show();
                 } else {
-                    Plan selectedplan = MainActivity.getTreatmentPlanList().get(selectedListItem);
+                    TreatmentPlan selectedPlan = MainActivity.getTreatmentPlanList().get(selectedListItem);
                     //Plan creator // editor fragment
                     /*(PlanFragment) getParentFragmentManager().getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.plan.PlanFragment");*/
-                    PlanFragment planFragment = new PlanFragment(selectedplan, binding.treatmentPlansListView);
+                    PlanFragment planFragment = new PlanFragment(selectedPlan, binding.treatmentPlansListView);
 
                     //Show Fragment
                     FragmentTransaction planF = getParentFragmentManager().beginTransaction().add(planFragment, "planF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(planFragment);
@@ -122,12 +127,16 @@ public class TreatmentsTabFragment extends Fragment {
                 }
             }
         });
-        Log.d("FragmentTag", "onViewCreated: " + getTag());
 
     }
 
+    private void generateMoreInfoFragment(TreatmentPlan treatmentPlan) {
+        MorePlanInfoFragment moreInfoFragment = new MorePlanInfoFragment(treatmentPlan);
+        getParentFragmentManager().beginTransaction().add(moreInfoFragment, "morePlanInfoF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(moreInfoFragment).commit();
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentTreatmentsTabBinding.inflate(getLayoutInflater());
         return binding.getRoot();
     }

@@ -1,11 +1,6 @@
 package com.example.mediplanner.calendar;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +8,24 @@ import android.widget.NumberPicker;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.mediplanner.MainActivity;
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.FragmentCalendarTabBinding;
 import com.example.mediplanner.date.MonthPickerDialogFragment;
+import com.example.mediplanner.plan.MorePlanInfoFragment;
+import com.example.mediplanner.plan.TreatmentPlan;
 import com.example.mediplanner.plan.TreatmentUsage;
 import com.example.mediplanner.utils.CloseListener;
+import com.example.mediplanner.utils.MoreButtonListener;
 
 import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -97,7 +99,6 @@ public class CalendarTabFragment extends Fragment {
                 monthPicker.show(getParentFragmentManager(), "MonthPickerDialogFragment");
             }
         };
-
         binding.yearAndMonthView.setOnClickListener(listener);
 
     }
@@ -192,7 +193,12 @@ public class CalendarTabFragment extends Fragment {
                 selectedDayCell = (DayFrameLayout) v;
                 selectedDayCell.setSelected(true);
                 selectedDay = selectedDayCell.getCellDay();
-                arrayAdapter = new DayTreatmentsArrayAdapter(getContext(), 0, new ArrayList<TreatmentUsage>(sortedTreatmentUsages()), selectedDay);
+                arrayAdapter = new DayTreatmentsArrayAdapter(getContext(), 0, new ArrayList<TreatmentUsage>(sortedTreatmentUsages()), selectedDay, new MoreButtonListener() {
+                    @Override
+                    public void getMoreInfoFragment(TreatmentPlan treatmentPlan) {
+                        generateMoreInfoFragment(treatmentPlan);
+                    }
+                });
                 binding.daysTreatmentList.setAdapter(arrayAdapter);
             }
 
@@ -203,18 +209,15 @@ public class CalendarTabFragment extends Fragment {
                     public int compare(TreatmentUsage o1, TreatmentUsage o2) {
                         String format = "%1$d%2$02d";
                         int noHour = 2500; //This will always be greater when compared to hours
-                        int val1 = o1.hour != null ? Integer.parseInt(
-                                String.format(Locale.getDefault(), format, o1.hour.hours.getHours(), o1.hour.minutes.getMinutes())) : noHour;
-                        int val2 = o2.hour != null ? Integer.parseInt(
-                                String.format(Locale.getDefault(), format, o2.hour.hours.getHours(), o2.hour.minutes.getMinutes())) : noHour;
+                        int val1 = o1.hour != null ? Integer.parseInt(String.format(Locale.getDefault(), format, o1.hour.hours.getHours(), o1.hour.minutes.getMinutes())) : noHour;
+                        int val2 = o2.hour != null ? Integer.parseInt(String.format(Locale.getDefault(), format, o2.hour.hours.getHours(), o2.hour.minutes.getMinutes())) : noHour;
 
                         int compare = Integer.compare(val1, val2);
                         /*
                            If both have no Hour it counts as having the same hour.
                            If both have the same Hour, compares the name, otherwise the value is the result of the comparison.
                         * */
-                        return compare == 0 ? o1.treatment.getName().compareToIgnoreCase(o2.treatment.getName())
-                                : compare;
+                        return compare == 0 ? o1.treatment.getName().compareToIgnoreCase(o2.treatment.getName()) : compare;
                     }
                 });
 
@@ -259,6 +262,11 @@ public class CalendarTabFragment extends Fragment {
                 return "";
         }
 
+    }
+
+    private void generateMoreInfoFragment(TreatmentPlan treatmentPlan) {
+        MorePlanInfoFragment moreInfoFragment = new MorePlanInfoFragment(treatmentPlan);
+        getParentFragmentManager().beginTransaction().add(moreInfoFragment, "morePlanInfoF").setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).setReorderingAllowed(true).show(moreInfoFragment).commit();
     }
 
     @Override
