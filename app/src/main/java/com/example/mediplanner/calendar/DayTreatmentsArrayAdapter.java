@@ -53,12 +53,12 @@ public class DayTreatmentsArrayAdapter extends ArrayAdapter<TreatmentUsage> {
         time.setText(text);
 
 
-        TextView quanitty = convertView.findViewById(R.id.dayTreatmentQuantity);
+        TextView quantity = convertView.findViewById(R.id.dayTreatmentQuantity);
         DecimalFormat decimalFormat = new DecimalFormat("0.##");
-        quanitty.setText(decimalFormat.format(treatment.getQuantity()));
+        quantity.setText(decimalFormat.format(treatment.getQuantity()));
 
         TextView quantityMetric = convertView.findViewById(R.id.dayTreatmentQuantityMetric);
-        quanitty.setText(treatment.getQuantityMetric());
+        quantity.setText(treatment.getQuantityMetric());
         TextView completeButton = convertView.findViewById(R.id.completeButton);
 
         TextView ignoreButton = convertView.findViewById(R.id.ignoreButton);

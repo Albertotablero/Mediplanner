@@ -155,13 +155,21 @@ public class MainActivity extends AppCompatActivity {
         x.getPlanHours().add(new PlanHours(8, 0));
         x.getPlanHours().add(new PlanHours(16, 0));
         x.getPlanHours().add(new PlanHours(00, 0));
-        TreatmentPlan y = new TreatmentPlan("Socorro", "meh", true, -1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.HOURLY);
-        y.setHourIntervalFrequency(2);
+        TreatmentPlan y = new TreatmentPlan("Socorro", "meh", true, 1, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.HOURLY);
+        y.setHourIntervalFrequency(8);
         y.setForm(2);
         y.setQuantity(200);
         y.setQuantityMetric("mL");
+        TreatmentPlan z = new TreatmentPlan("Socorro2", "meh", true, 3, 1, 3, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.WEEKLY);
+        for (int i = 0; i < 7; i++) {
+            z.getWeekdaysActive().add(i % 2 == 0);
+        }
+        z.setForm(2);
+        z.setQuantity(200);
+        z.setQuantityMetric("mL");
         treatmentPlanList.add(x);
         treatmentPlanList.add(y);
+        treatmentPlanList.add(z);
         treatmentPlanList.add(new TreatmentPlan("meh", "meh", true, 3, 1, 2, "Pill's", LocalDate.now(), true, 2, FrequencyMetric.ASNEEDED));
     }
 

@@ -108,7 +108,7 @@ public class MorePlanInfoFragment extends DialogFragment {
         switch (frequency) {
             // EVERY X HOURS
             case HOURLY:
-                view = FrequencyViewGenerator.setUpHoursIntervalDisplayView(getLayoutInflater(), getContext(), treatmentPlan);
+                view = FrequencyViewGenerator.setUpHoursIntervalDisplayView(getLayoutInflater(), getContext(), treatmentPlan, getResources().getStringArray(R.array.freq_type_array));
                 break;
             // DAILY
             case DAILY:
@@ -116,11 +116,11 @@ public class MorePlanInfoFragment extends DialogFragment {
                 break;
             // WEEKLY
             case WEEKLY:
-                //view = FrequencyViewGenerator.setUpWeeklyDisplayView(getLayoutInflater(), getContext(), treatmentPlan);
+                view = FrequencyViewGenerator.setUpWeeklyDisplayView(getLayoutInflater(), getContext(), treatmentPlan, getResources().getStringArray(R.array.freq_type_array));
                 break;
             // SPECIFIC DATES
             case SPECIFFICDATES:
-                //view = FrequencyViewGenerator.setUpSpecificDateDisplayView(getContext(), treatmentPlan);
+                view = FrequencyViewGenerator.setUpSpecificDateDisplayView(getContext(), treatmentPlan, getResources().getStringArray(R.array.freq_type_array));
                 break;
             default:
                 break;

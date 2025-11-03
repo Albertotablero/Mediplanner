@@ -97,7 +97,6 @@ public class TreatmentsTabFragment extends Fragment {
                 } else {
                     TreatmentPlan selectedPlan = MainActivity.getTreatmentPlanList().get(selectedListItem);
                     //Plan creator // editor fragment
-                    /*(PlanFragment) getParentFragmentManager().getFragmentFactory().instantiate(ClassLoader.getSystemClassLoader(), "com.example.mediplanner.plan.PlanFragment");*/
                     PlanFragment planFragment = new PlanFragment(selectedPlan, binding.treatmentPlansListView);
 
                     //Show Fragment
@@ -119,6 +118,7 @@ public class TreatmentsTabFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             treatmentPlans.remove(selectedListItem);
                             treatmentListVAdapter.notifyDataSetChanged();
+                            binding.treatmentPlansListView.getChildAt(selectedListItem).setActivated(false);
                             selectedListItem = -1;
                         }
                     }).setNegativeButton(android.R.string.no, null).show();

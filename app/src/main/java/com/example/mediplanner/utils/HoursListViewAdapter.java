@@ -97,6 +97,7 @@ public class HoursListViewAdapter extends ArrayAdapter<PlanHours> {
             removeItem.setOnClickListener(e -> removeHour(e, position));
         } else {
             removeItem.setVisibility(View.GONE);
+
         }
 
         return convertView;

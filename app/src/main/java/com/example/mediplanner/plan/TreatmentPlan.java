@@ -23,6 +23,7 @@ public class TreatmentPlan {
     private String quantityMetric = "";
 
     //for specific treatment forms or frequencies
+    private PlanHours initialHour;
     private ArrayList<String> specificDates;
     private ArrayList<PlanHours> planHours;
     private ArrayList<Boolean> weekdaysActive;
@@ -96,25 +97,25 @@ public class TreatmentPlan {
 
         switch (frequencyMetric) {
             case 1:
-                this.frequencyMetric = FrequencyMetric.DAILY;
-                break;
-            case 2:
-                this.frequencyMetric = FrequencyMetric.WEEKLY;
+                this.frequencyMetric = FrequencyMetric.HOURLY;
                 break;
             case 3:
-                this.frequencyMetric = FrequencyMetric.MONTHLY;
+                this.frequencyMetric = FrequencyMetric.WEEKLY;
                 break;
             case 4:
-                this.frequencyMetric = FrequencyMetric.YEARLY;
+                this.frequencyMetric = FrequencyMetric.MONTHLY;
                 break;
             case 5:
-                this.frequencyMetric = FrequencyMetric.SPECIFFICDATES;
+                this.frequencyMetric = FrequencyMetric.YEARLY;
                 break;
             case 6:
+                this.frequencyMetric = FrequencyMetric.SPECIFFICDATES;
+                break;
+            case 7:
                 this.frequencyMetric = FrequencyMetric.ASNEEDED;
                 break;
             default:
-                this.frequencyMetric = FrequencyMetric.HOURLY;
+                this.frequencyMetric = FrequencyMetric.DAILY;
                 break;
         }
 
@@ -217,5 +218,17 @@ public class TreatmentPlan {
 
     public void setHourIntervalFrequency(int hourIntervalFrequency) {
         this.hourIntervalFrequency = hourIntervalFrequency;
+    }
+
+    public void setForm(TreatmentForm form) {
+        this.form = form;
+    }
+
+    public PlanHours getInitialHour() {
+        return initialHour;
+    }
+
+    public void setInitialHour(PlanHours initialHour) {
+        this.initialHour = initialHour;
     }
 }

@@ -53,12 +53,12 @@ public class FrequencyViewGenerator {
         list.setAdapter(adapter);
 
         // Number pickers for init Hour from which the rest will be calculated, sharing a listener
-        NumberPicker hourPicker = houtIntervalView.findViewById(R.id.monthPicker);
+        NumberPicker hourPicker = houtIntervalView.findViewById(R.id.hourPicker);
         hourPicker.setTag("hourP");
         hourPicker.setMinValue(0);
         hourPicker.setMaxValue(23);
 
-        NumberPicker minutePicker = houtIntervalView.findViewById(R.id.yearPicker);
+        NumberPicker minutePicker = houtIntervalView.findViewById(R.id.minutePicker);
         minutePicker.setTag("minuteP");
         minutePicker.setMinValue(0);
         minutePicker.setMaxValue(59);
@@ -142,20 +142,8 @@ public class FrequencyViewGenerator {
             weeksActive.add(false);
         }
 
-        // Monday
-        setUpWeekButtons(weeklyView, R.id.mondayButton, 0, weeksActive, true);
-        // Tuesday
-        setUpWeekButtons(weeklyView, R.id.tuesdayButton, 1, weeksActive, true);
-        // Wednesda,truey
-        setUpWeekButtons(weeklyView, R.id.wednesdayButton, 2, weeksActive, true);
-        // Thursday
-        setUpWeekButtons(weeklyView, R.id.thursdayButton, 3, weeksActive, true);
-        // Friday
-        setUpWeekButtons(weeklyView, R.id.fridayButton, 4, weeksActive, true);
-        // Saturday
-        setUpWeekButtons(weeklyView, R.id.saturdayButton, 5, weeksActive, true);
-        // Sunday
-        setUpWeekButtons(weeklyView, R.id.sundayButton, 6, weeksActive, true);
+        setUpWeekButtons((LinearLayout) weeklyView.findViewById(R.id.weekDayButtons), weeksActive, false);
+
 
         //Managing the hour for the treatment
         HoursListViewAdapter hoursAdapterWeekly = new HoursListViewAdapter(context, treatmentPlan.getPlanHours(), fragmentManager);
@@ -175,9 +163,6 @@ public class FrequencyViewGenerator {
     }
 
     public static @NonNull NoScrollListView setUpSpecificDateEditView(Context context, TreatmentPlan treatmentPlan) {
-        // Hiding unnecessary items
-
-
         NoScrollListView specificDatesListView = new NoScrollListView(context);
 
         SpecificDateViewAdapter specificDateViewAdapter = new SpecificDateViewAdapter(context, treatmentPlan.getSpecificDates(), DATE_FORMAT);
@@ -202,8 +187,13 @@ public class FrequencyViewGenerator {
         For DISPLAY views
      */
 
-    public static View setUpHoursIntervalDisplayView(LayoutInflater layoutInflater, Context context, TreatmentPlan treatmentPlan) {
+    public static View setUpHoursIntervalDisplayView(LayoutInflater layoutInflater, Context context, TreatmentPlan treatmentPlan, String[] freqTextArray) {
         RelativeLayout hourIntervalView = (RelativeLayout) layoutInflater.inflate(R.layout.hour_interval_frequency_view, null, false);
+
+        TextView frequencyTypeText = new TextView(context);
+        frequencyTypeText.setTypeface(frequencyTypeText.getTypeface(), Typeface.BOLD);
+        frequencyTypeText.setText(freqTextArray[treatmentPlan.getFrequencyMetric().getValue()]);
+        hourIntervalView.addView(frequencyTypeText);
 
         EditText hoursInterval = hourIntervalView.findViewById(R.id.hourIntervalEditText);
         hoursInterval.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -211,8 +201,8 @@ public class FrequencyViewGenerator {
 
         // Hiding anything not needed for display purposes
         hourIntervalView.findViewById(R.id.hoursInADay).setVisibility(View.GONE);
-        hourIntervalView.findViewById(R.id.monthPicker).setVisibility(View.GONE);
-        hourIntervalView.findViewById(R.id.yearPicker).setVisibility(View.GONE);
+        hourIntervalView.findViewById(R.id.hourPicker).setVisibility(View.GONE);
+        hourIntervalView.findViewById(R.id.minutePicker).setVisibility(View.GONE);
         hourIntervalView.findViewById(R.id.separator).setVisibility(View.GONE);
         hourIntervalView.findViewById(R.id.startTextView).setVisibility(View.GONE);
 
@@ -231,11 +221,6 @@ public class FrequencyViewGenerator {
         frequencyTypeText.setText(freqTextArray[treatmentPlan.getFrequencyMetric().getValue()]);
         view.addView(frequencyTypeText);
 
-        // Setting up adapter for list view
-        if (treatmentPlan.getPlanHours().isEmpty() && isNew) {
-            DateTime now = DateTime.now();
-            treatmentPlan.getPlanHours().add(new PlanHours(now.getHourOfDay(), now.getMinuteOfHour()));
-        }
         if (!treatmentPlan.getPlanHours().isEmpty()) {
             HoursListViewAdapter hoursAdapter = new HoursListViewAdapter(context, treatmentPlan.getPlanHours());
             dailyHoursView.setAdapter(hoursAdapter);
@@ -244,6 +229,46 @@ public class FrequencyViewGenerator {
             view.addView(dailyHoursView);
         }
         return view;
+    }
+
+    public static View setUpWeeklyDisplayView(LayoutInflater layoutInflater, Context context, TreatmentPlan treatmentPlan, String[] freqTextArray) {
+        LinearLayout weeklyDisplayView = new LinearLayout(context);
+        weeklyDisplayView.setOrientation(LinearLayout.VERTICAL);
+
+        TextView frequencyTypeText = new TextView(context);
+        frequencyTypeText.setTypeface(frequencyTypeText.getTypeface(), Typeface.BOLD);
+        frequencyTypeText.setText(freqTextArray[treatmentPlan.getFrequencyMetric().getValue()]);
+        weeklyDisplayView.addView(frequencyTypeText);
+
+        RelativeLayout weeklyView = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.week_day_picker_widget, null, false);
+
+        // Setting up functionality for each button
+        ArrayList<Boolean> weeksActive = treatmentPlan.getWeekdaysActive();
+
+        setUpWeekButtons((LinearLayout) weeklyView.findViewById(R.id.weekDayButtons), weeksActive, true);
+
+        //Managing the hour for the treatment
+        HoursListViewAdapter hoursAdapterWeekly = new HoursListViewAdapter(context, treatmentPlan.getPlanHours(), null);
+        NoScrollListView weeklyHours = weeklyView.findViewById(R.id.hoursListWeekly);
+        weeklyHours.setAdapter(hoursAdapterWeekly);
+
+        weeklyDisplayView.addView(weeklyView);
+        return weeklyDisplayView;
+    }
+
+
+    public static View setUpSpecificDateDisplayView(Context context, TreatmentPlan treatmentPlan, String[] stringArray) {
+        NoScrollListView specificDatesListView = new NoScrollListView(context);
+
+        SpecificDateViewAdapter specificDateViewAdapter = new SpecificDateViewAdapter(context, treatmentPlan.getSpecificDates(), DATE_FORMAT);
+        specificDatesListView.setAdapter(specificDateViewAdapter);
+
+        if (treatmentPlan.getSpecificDates().isEmpty()) {
+            LocalDate now = LocalDate.now();
+            specificDateViewAdapter.add(String.format(Locale.getDefault(), DATE_FORMAT, now.getDayOfMonth(), now.getMonthOfYear(), now.getYear()));
+        }
+
+        return specificDatesListView;
     }
 
     /*
@@ -264,15 +289,19 @@ public class FrequencyViewGenerator {
         hoursAdapter.add(new PlanHours(DateTime.now().getHourOfDay(), DateTime.now().getMinuteOfHour()));
     }
 
-    public static void setUpWeekButtons(RelativeLayout weeklyView, int buttonID, int dayOfWeek, ArrayList<Boolean> weeksActive, boolean display) {
-        TextView b = weeklyView.findViewById(buttonID);
+    public static void setUpWeekButtons(LinearLayout weekDayButtons, ArrayList<Boolean> weeksActive, boolean display) {
+        int i = 0;
+        for (; i < weekDayButtons.getChildCount(); i++) {
+            TextView b = (TextView) weekDayButtons.getChildAt(i);
 
-        // If it's for display it activates based on stored values, otherwise defaults to false (Not activated)
-        b.setActivated(display ? weeksActive.get(dayOfWeek) : false);
+            b.setActivated(weeksActive.get(i));
 
-        // If it's for display it doesn't need an OnClickListener
-        if (!display)
-            b.setOnClickListener(e -> changeWeekButtonSate(weeksActive, dayOfWeek, b));
+            // If it's for display it doesn't need an OnClickListener
+            if (!display) {
+                int dayOfWeek = i; // Java shenanigans (Variables in lamda expressions should be at least effectively final
+                b.setOnClickListener(e -> changeWeekButtonSate(weeksActive, dayOfWeek, b));
+            }
+        }
 
     }
 
@@ -281,4 +310,6 @@ public class FrequencyViewGenerator {
         daysActive.set(dayOfWeek, !daysActive.get(dayOfWeek));
         weekdayButton.setActivated(daysActive.get(dayOfWeek));
     }
+
+
 }

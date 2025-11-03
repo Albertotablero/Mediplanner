@@ -10,7 +10,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mediplanner.R;
 import com.example.mediplanner.databinding.PlanFragmentViewBinding;
+import com.example.mediplanner.date.PlanHours;
 import com.example.mediplanner.treatmentPlansTab.TreatmentsArrayAdapter;
 import com.example.mediplanner.utils.CloseListener;
 import com.example.mediplanner.utils.MediPConstants;
@@ -45,8 +48,6 @@ public class PlanFragment extends DialogFragment {
     private boolean isCanceled = false;
 
     private CloseListener closeListener;
-
-    private boolean generationFlag = false;
 
     public PlanFragment(CloseListener closeListener) {
         super();
@@ -241,7 +242,7 @@ public class PlanFragment extends DialogFragment {
                     Toast.makeText(getContext(), R.string.selectForm, Toast.LENGTH_SHORT).show();
                 } else {
                     savePlan();
-                    if (closeListener != null) closeListener.OnClose(isCanceled);
+                    //if (closeListener != null) closeListener.OnClose(isCanceled);
                     getParentFragmentManager().beginTransaction().remove(PlanFragment.this).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).commit();
                 }
             }
@@ -290,7 +291,7 @@ public class PlanFragment extends DialogFragment {
     }
 
 
-    // uhhhhh size??
+    // Screen Size
     @Override
     public void onResume() {
         super.onResume();
@@ -306,7 +307,7 @@ public class PlanFragment extends DialogFragment {
         // Saving name without checking because the check occurs earlier
         treatmentPlan.setName(planBinding.nameTextInput.getText().toString());
 
-        // Catching nullpointer exception that results from trying to get empty text from an EditText
+        // Catching nullPointer exception that results from trying to get empty text from an EditText
         try {
             treatmentPlan.setDetails(planBinding.detailsTextInput.getText().toString());
         } catch (NullPointerException e) {
@@ -314,6 +315,16 @@ public class PlanFragment extends DialogFragment {
         }
 
         treatmentPlan.setFrequencyMetric(planBinding.freqTypeSpinner.getSelectedItemPosition());
+        switch (treatmentPlan.getFrequencyMetric()) {
+            case HOURLY:
+                treatmentPlan.setHourIntervalFrequency(Integer.parseInt(((EditText) planBinding.frequencyBox.findViewById(R.id.hourIntervalEditText)).getText().toString()));
+                treatmentPlan.setInitialHour(new PlanHours(((NumberPicker) planBinding.frequencyBox.findViewById(R.id.hourPicker)).getValue(),
+                        ((NumberPicker) planBinding.frequencyBox.findViewById(R.id.minutePicker)).getValue()));
+                break;
+            case DAILY:
+
+                break;
+        }
 
         // Saving star date if it's needed
         if (planBinding.startDateInput.getVisibility() == View.VISIBLE) {
@@ -356,7 +367,16 @@ public class PlanFragment extends DialogFragment {
 
         switch (treatmentPlan.getFrequencyMetric()) {
             case HOURLY:
+                // On Hourly frequency it loads the interval and the initial hour
                 planBinding.freqTypeSpinner.setSelection(1);
+                EditText hourInterval = (EditText) planBinding.frequencyBox.getChildAt(0);
+                hourInterval.setText(String.format(Locale.getDefault(), "%02d", treatmentPlan.getHourIntervalFrequency()));
+
+                NumberPicker hourPicker = planBinding.frequencyBox.findViewById(R.id.hourPicker);
+                NumberPicker minutePicker = planBinding.frequencyBox.findViewById(R.id.minutePicker);
+                hourPicker.setValue(treatmentPlan.getInitialHour().hours.getHours());
+                minutePicker.setValue(treatmentPlan.getInitialHour().minutes.getMinutes());
+
                 break;
             case DAILY:
                 planBinding.freqTypeSpinner.setSelection(2);
