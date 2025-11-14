@@ -63,10 +63,8 @@ public class CalendarTabFragment extends Fragment {
         populateCalendar(initDate);
         // TODO Load plan data, good luck Alberto
 
-        weekOfSelectedDay = findInitWeek(initDate);
-        TableRow selectedDayRow = (TableRow) binding.calendarTL.getChildAt(weekOfSelectedDay + 1);
-        int initDayOfWeek = initDate.getDayOfWeek();
-        View child = selectedDayRow.getChildAt(initDayOfWeek - 1);
+        weekOfSelectedDay = selectedMonth.getDays().get(initDate.getDayOfMonth() - 1).getWeekOfMonth();
+        View child = getTableRow(selectedMonth.getDays().get(initDate.getDayOfMonth() - 1).getWeekOfMonth()).getChildAt(selectedMonth.getDays().get(initDate.getDayOfMonth() - 1).getDayOfWeek() - 1);
         child.callOnClick();
 
         View.OnClickListener listener = new View.OnClickListener() {
@@ -107,83 +105,76 @@ public class CalendarTabFragment extends Fragment {
         for (int i = 1; i < binding.calendarTL.getChildCount(); i++) {
             TableRow row = (TableRow) binding.calendarTL.getChildAt(i);
             row.removeAllViews();
+            row.setVisibility(View.GONE);
         }
     }
 
     private void populateCalendar(LocalDate date) {
         // Populating the Calendar with the required rows and cells
-        int dayOfWeek = 0;
-        TableRow weekRow = null;
-        for (int i = 0; i < selectedMonth.getWeeks().size(); i++) {
-            weekRow = (TableRow) binding.calendarTL.getChildAt(i + 1);
-            Week week = selectedMonth.getWeeks().get(i);
+        int dayCounter = 0;
+        int weekCounter = 1;
+        Day auxDay = selectedMonth.getDays().get(dayCounter);
 
-
-            int dayN = 0;
-            dayOfWeek = 0;
-            // If month doesn't start on monday, populate previews cells with previows month's last days
-            int firstDayOfWeek = week.getDaysOfWeek().get(0).getDayOfWeek();
-            if (i == 0 && firstDayOfWeek != 1) {
-                LocalDate previousMonthDate = date.minusMonths(1);
-                Month previowsMonth = getMonth(previousMonthDate.getMonthOfYear(), previousMonthDate.getYear());
-
-                int k = previowsMonth.getDays().get(previowsMonth.getDays().size() - (firstDayOfWeek - 1)).getDayOfMonth();
-                for (; dayOfWeek < firstDayOfWeek - 1; k++) {
-                    Day day = previowsMonth.getDays().get(k - 1);
-                    generateCell(weekRow, dayOfWeek++, day, String.format(Locale.getDefault(), "%2d", day.getDayOfMonth()), false);
-                }
-                dayOfWeek = firstDayOfWeek - 1;
+        if (auxDay.getDayOfWeek() > 1) {
+            LocalDate prevMonthDate = date.minusMonths(1);
+            Month previousMonth = getMonth(prevMonthDate.getMonthOfYear(), prevMonthDate.getYear());
+            // To find the first day of the week from the last week of the previous month the formula basically is:
+            // Length of Previous month - (dayOfWeek of first day current month - 2) - 1 Because it's an array
+            Day prevMonthDay = previousMonth.getDays().get(previousMonth.getDays().size() - (auxDay.getDayOfWeek() - 2) - 1);
+            generateCell(getTableRow(weekCounter), prevMonthDay, false);
+            for (int i = 1; i <= auxDay.getDayOfWeek() - 2; i++) {
+                prevMonthDay = previousMonth.getDays().get(prevMonthDay.getDayOfMonth());
+                generateCell(getTableRow(weekCounter), prevMonthDay, false);
             }
-            try {
-                for (; dayOfWeek < 7; dayOfWeek++) {
-
-                    Day day = week.getDaysOfWeek().get(dayN++);
-
-                    String dayOfMonth = String.format(Locale.getDefault(), "%2d", day.getDayOfMonth());
-
-                    generateCell(weekRow, dayOfWeek, day, dayOfMonth, true);
-
-                }
-            } catch (IndexOutOfBoundsException e) {
-
-            }
-
-            weekRow.setVisibility(View.VISIBLE);
         }
-        if (dayOfWeek < 7) {
-            LocalDate nextMonthDate = date.minusMonths(1);
+        for (Day day : selectedMonth.getDays()) {
+            auxDay = day;
+            weekCounter = auxDay.getWeekOfMonth();
+            generateCell(getTableRow(weekCounter), auxDay, true);
+        }
+        if (auxDay.getDayOfWeek() < 7) {
+            LocalDate nextMonthDate = date.plusMonths(1);
             Month nextMonth = getMonth(nextMonthDate.getMonthOfYear(), nextMonthDate.getYear());
-
-            int k = nextMonth.getDays().get(0).getDayOfMonth();
-            for (; dayOfWeek < 7; k++) {
-                Day day = nextMonth.getDays().get(k - 1);
-                generateCell(weekRow, dayOfWeek++, day, String.format(Locale.getDefault(), "%2d", day.getDayOfMonth()), false);
+            int dayCount = 0;
+            for (int i = 0; i < 7 - auxDay.getDayOfWeek(); i++) {
+                generateCell(getTableRow(auxDay.getWeekOfMonth()), nextMonth.getDays().get(dayCount++), false);
             }
         }
     }
 
-    private int findInitWeek(LocalDate initDate) {
-        for (int i = 0; i < selectedMonth.getWeeks().size(); i++) {
-            for (Day d : selectedMonth.getWeeks().get(i).getDaysOfWeek()) {
-                if (d.getDayOfMonth() == initDate.getDayOfMonth()) return i;
-            }
+    private TableRow getTableRow(int weekCounter) {
+        switch (weekCounter) {
+            case 1:
+                return binding.calendarRow1;
+            case 2:
+                return binding.calendarRow2;
+            case 3:
+                return binding.calendarRow3;
+            case 4:
+                return binding.calendarRow4;
+            case 5:
+                return binding.calendarRow5;
+            case 6:
+                return binding.calendarRow6;
+
         }
-        return 1;
+        return null;
     }
+
 
     private Month getMonth(int monthNumber, int year) {
         String monthTag = String.format(Locale.getDefault(), "%1$2d/%2$4d", monthNumber, year);
         return MainActivity.getStoredMonths().containsKey(monthTag) ? MainActivity.getStoredMonths().get(monthTag) : MainActivity.addMonth(new Month(monthNumber, year), monthTag);
     }
 
-    private void generateCell(TableRow row, int j, Day day, String dayOfMonth, boolean isCurrentMonth) {
+    private void generateCell(TableRow row, Day day, boolean isCurrentMonth) {
         // Inflating the cells for each day in the month
         DayFrameLayout view = (DayFrameLayout) getLayoutInflater().inflate(R.layout.calendar_day_cell_view, null, false);
         TextView dayText = view.findViewById(R.id.dayTextView);
         view.setCellDay(day);
-        dayText.setText(dayOfMonth);
+        dayText.setText(String.format(Locale.getDefault(), "%2d", day.getDayOfMonth()));
         TableRow.LayoutParams params = (TableRow.LayoutParams) view.getLayoutParams();
-        if (params != null) params.column = 1;
+        if (params != null) params.column = day.getDayOfWeek();
 
         view.setSelected(false);
         view.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +217,7 @@ public class CalendarTabFragment extends Fragment {
         });
         view.setActivated(isCurrentMonth);
         row.addView(view);
+        if (row.getVisibility() != View.VISIBLE) row.setVisibility(View.VISIBLE);
     }
 
     public void onRowClicked(int i) {
